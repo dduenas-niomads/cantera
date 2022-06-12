@@ -1,0 +1,185 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+	<s:Body>
+		<Registrar xmlns="http://tempuri.org/">
+			<oGeneral xmlns:a="http://schemas.datacontract.org/2004/07/Libreria.XML.Facturacion"
+				xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+				<a:Autenticacion>
+					<a:Clave>20100392403Qa</a:Clave>
+					<a:Ruc>20100392403</a:Ruc>
+				</a:Autenticacion>
+				<a:oENComprobante>
+					<a:CodigoCliente>20106740004</a:CodigoCliente>
+					<a:ComprobanteDetalle>
+						<a:ENComprobanteDetalle>
+							<a:Cantidad>1</a:Cantidad>
+							<a:CodigoProductoSunat>DSDFG</a:CodigoProductoSunat>
+							<a:CodigoTipoPrecio>01</a:CodigoTipoPrecio>
+							<a:ComprobanteDetalleImpuestos>
+								<a:ENComprobanteDetalleImpuestos>
+									<a:AfectacionIGV>10</a:AfectacionIGV>
+									<a:CodigoTributo>1000</a:CodigoTributo>
+									<a:CodigoUN>VAT</a:CodigoUN>
+									<a:DesTributo>IGV</a:DesTributo>
+									<a:ImporteExplicito>0.15</a:ImporteExplicito>
+									<a:ImporteTributo>0.15</a:ImporteTributo>
+									<a:MontoBase>0.85</a:MontoBase>
+									<a:TasaAplicada>18</a:TasaAplicada>
+								</a:ENComprobanteDetalleImpuestos>
+							</a:ComprobanteDetalleImpuestos>
+							<a:Descripcion>Producto 01</a:Descripcion>
+							<a:Determinante>1</a:Determinante>
+							<a:ImpuestoTotal>0.15</a:ImpuestoTotal>
+							<a:Item>1</a:Item>
+							<a:PrecioVentaItem>1.00</a:PrecioVentaItem>
+							<a:Total>0.85</a:Total>
+							<a:UnidadComercial>NIU</a:UnidadComercial>
+							<a:ValorVentaUnitario>0.85</a:ValorVentaUnitario>
+							<a:ValorVentaUnitarioIncIgv>1.00</a:ValorVentaUnitarioIncIgv>
+						</a:ENComprobanteDetalle>
+					</a:ComprobanteDetalle>
+					<a:ComprobanteDetalle>
+						<a:ENComprobanteDetalle>
+							<a:Cantidad>1</a:Cantidad>
+							<a:CodigoProductoSunat>DSDFG2</a:CodigoProductoSunat>
+							<a:CodigoTipoPrecio>01</a:CodigoTipoPrecio>
+							<a:ComprobanteDetalleImpuestos>
+								<a:ENComprobanteDetalleImpuestos>
+									<a:AfectacionIGV>10</a:AfectacionIGV>
+									<a:CodigoTributo>1000</a:CodigoTributo>
+									<a:CodigoUN>VAT</a:CodigoUN>
+									<a:DesTributo>IGV</a:DesTributo>
+									<a:ImporteExplicito>0.30</a:ImporteExplicito>
+									<a:ImporteTributo>0.30</a:ImporteTributo>
+									<a:MontoBase>1.70</a:MontoBase>
+									<a:TasaAplicada>18</a:TasaAplicada>
+								</a:ENComprobanteDetalleImpuestos>
+							</a:ComprobanteDetalleImpuestos>
+							<a:Descripcion>Producto 02</a:Descripcion>
+							<a:Determinante>1</a:Determinante>
+							<a:ImpuestoTotal>0.30</a:ImpuestoTotal>
+							<a:Item>2</a:Item>
+							<a:PrecioVentaItem>2.00</a:PrecioVentaItem>
+							<a:Total>1.70</a:Total>
+							<a:UnidadComercial>NIU</a:UnidadComercial>
+							<a:ValorVentaUnitario>1.70</a:ValorVentaUnitario>
+							<a:ValorVentaUnitarioIncIgv>2.00</a:ValorVentaUnitarioIncIgv>
+						</a:ENComprobanteDetalle>
+					</a:ComprobanteDetalle>
+					<a:ComprobanteGrillaCuenta>
+						<a:ENComprobanteGrillaCuenta>
+							<a:Descripcion>BCP SOLES</a:Descripcion>
+							<a:Valor1>SOLES</a:Valor1>
+							<a:Valor2>194-1333331-0-30</a:Valor2>
+							<a:Valor3>002-194-006666661030-93</a:Valor3>
+						</a:ENComprobanteGrillaCuenta>
+						<a:ENComprobanteGrillaCuenta>
+							<a:Descripcion>BCP DOLAR</a:Descripcion>
+							<a:Valor1>DÓLARES AMERICANOS</a:Valor1>
+							<a:Valor2>194-1444417-1-20</a:Valor2>
+							<a:Valor3>002-194-001643555555-95</a:Valor3>
+						</a:ENComprobanteGrillaCuenta>
+					</a:ComprobanteGrillaCuenta>
+					<a:ComprobantePropiedadesAdicionales>
+						<a:ENComprobantePropiedadesAdicionales>
+							<a:Codigo>1000</a:Codigo>
+							<a:Valor>SON TRES Y 00/100 SOLES</a:Valor>
+						</a:ENComprobantePropiedadesAdicionales>
+					</a:ComprobantePropiedadesAdicionales>
+					<a:FechaEmision>2021-07-09</a:FechaEmision>
+					<a:FormaPago>
+						<a:ENFormaPago>
+							<a:CodigoFormaPago>001</a:CodigoFormaPago>
+							<a:DiasVencimiento>30</a:DiasVencimiento>
+							<a:FechaVencimiento>2021-07-09</a:FechaVencimiento>
+							<a:NotaInstruccion>CONTADO</a:NotaInstruccion>
+						</a:ENFormaPago>
+					</a:FormaPago>
+					<a:FormaPagoSunat>
+						<a:TipoFormaPago>1</a:TipoFormaPago>
+					</a:FormaPagoSunat>
+					<a:HoraEmision>12:00:00</a:HoraEmision>
+					<a:ImporteTotal>3.00</a:ImporteTotal>
+					<a:Moneda>PEN</a:Moneda>
+					<a:MontosTotales>
+						<a:Gravado>
+							<a:GravadoIGV>
+								<a:Base>2.55</a:Base>
+								<a:Porcentaje>18.00</a:Porcentaje>
+								<a:ValorImpuesto>0.45</a:ValorImpuesto>
+							</a:GravadoIGV>
+							<a:Total>2.55</a:Total>
+						</a:Gravado>
+					</a:MontosTotales>
+					<a:NrodePedido></a:NrodePedido>
+					<a:Numero>8</a:Numero>
+					<a:RazonSocial>VULCO PERU S.A.</a:RazonSocial>
+					<a:Receptor>
+						<a:ENReceptor>
+							<a:Calle>AV. SEPARADORA INDUSTRIAL 2201 URB.VULCANO - LIMA - LIMA - ATE</a:Calle>
+							<a:Codigo>070101</a:Codigo>
+							<a:CodPais>PE</a:CodPais>
+							<a:Departamento>LIMA</a:Departamento>
+							<a:Distrito>ATE</a:Distrito>
+							<a:Provincia>LIMA</a:Provincia>
+						</a:ENReceptor>
+					</a:Receptor>
+					<a:Ruc>20106740004</a:Ruc>
+					<a:Serie>FA02</a:Serie>
+					<a:Sucursal>
+						<a:ENSucursal>
+							<a:Direccion>AV. DOS DE MAYO NRO. 647 PROV. CONST. DEL CALLAO</a:Direccion>
+							<a:Distrito>CALLAO</a:Distrito>
+							<a:Provincia>CALLAO</a:Provincia>
+							<a:Departamento>CALLAO</a:Departamento>
+						</a:ENSucursal>
+					</a:Sucursal>
+					<a:Texto>
+						<a:ENTexto>
+							<a:Texto1>TEXTO EN ENCABEZADO Texto 1</a:Texto1>
+							<a:Texto10>Texto 10</a:Texto10>
+							<a:Texto11>Texto 11</a:Texto11>
+							<a:Texto12>Twxto 12</a:Texto12>
+							<a:Texto13>Texto 13</a:Texto13>
+							<a:Texto14>Texto 14</a:Texto14>
+							<a:Texto2>REFERENCIA Texto 2</a:Texto2>
+							<a:Texto3>2021013 Texto 3</a:Texto3>
+							<a:Texto4>DEL Texto 4</a:Texto4>
+							<a:Texto5>AL Texto 5</a:Texto5>
+							<a:Texto6>DIAS Texto 6</a:Texto6>
+							<a:Texto7>Cant Texto 7</a:Texto7>
+							<a:Texto8>Bultos Texto 8</a:Texto8>
+							<a:Texto9>Valor Texto 9</a:Texto9>
+						</a:ENTexto>
+					</a:Texto>
+					<a:TipoComprobante>01</a:TipoComprobante>
+					<a:TipoDocumentoIdentidad>6</a:TipoDocumentoIdentidad>
+					<a:TipoOperacion>0101</a:TipoOperacion>
+					<a:TipoPlantilla>ST1</a:TipoPlantilla>
+					<a:TotalImpuesto>0.45</a:TotalImpuesto>
+					<a:TotalPrecioVenta>3.00</a:TotalPrecioVenta>
+					<a:TotalValorVenta>2.55</a:TotalValorVenta>
+					<a:VersionUbl>2.1</a:VersionUbl>
+				</a:oENComprobante>
+				<a:oENEmpresa>
+					<a:Calle>AV. DOS DE MAYO NRO. 647 PROV. CONST. DEL CALLAO</a:Calle>
+					<a:CodDistrito>15015</a:CodDistrito>
+					<a:CodPais>PE</a:CodPais>
+					<a:CodigoEstablecimientoSUNAT>0000</a:CodigoEstablecimientoSUNAT>
+					<a:CodigoTipoDocumento>6</a:CodigoTipoDocumento>
+					<a:Correo>prueba@aldesa.com.pe</a:Correo>
+					<a:Departamento>CALLAO</a:Departamento>
+					<a:Distrito>CALLAO</a:Distrito>
+					<a:NombreComercial>ALDESA</a:NombreComercial>
+					<a:Provincia>CALLAO</a:Provincia>
+					<a:RazonSocial>ALMACENES DE DEPOSITO S.A.C. ALDESA</a:RazonSocial>
+					<a:Ruc>20100392403</a:Ruc>
+					<a:Telefono>322-5555</a:Telefono>
+					<a:Web>www.aldesaprueba.com.pe</a:Web>
+				</a:oENEmpresa>
+			</oGeneral>
+			<oTipoComprobante>Factura</oTipoComprobante>
+			<TipoCodigo>0</TipoCodigo>
+			<Otorgar>1</Otorgar>
+		</Registrar>
+	</s:Body>
+</s:Envelope>

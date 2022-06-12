@@ -1,0 +1,88 @@
+.simple_ul {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+
+.mgBt-Excel {
+    margin-bottom: 10px;
+    margin-right: 15px;
+}
+
+.dt-buttons {
+    text-align: right;
+}
+
+.thTaxationLeft {
+    height: 30px;
+    font-size: .65rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #1c345d;
+    border-radius: 0.375rem 0 0 0;
+    color: #ffffff;
+    background-color: #1c345d;
+}
+
+.thTaxationMiddle {
+    font-size: .65rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #1c345d;
+    border-radius: 0 0 0 0;
+    color: #ffffff;
+    background-color: #1c345d;
+}
+
+.thTaxationRight {
+    font-size: .65rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #1c345d;
+    border-radius: 0 0.375rem 0 0;
+    color: #ffffff;
+    background-color: #1c345d;
+}
+
+.myTable {
+    width:100%; 
+    font-size: 11px;
+    vertical-align: baseline;
+}
+
+.form-control-autocomplete {
+    display: block;
+    width: 100%;
+    /* height: 34px; */
+    padding: 6px 12px;
+    font-size: 14px;
+    /* line-height: 1.42857143; */
+    background-color: #ffffff;
+    /* background-image: none; */
+    border: 1px solid #c3c3cc;
+    cursor: pointer;
+    border-radius: 4px;
+    /* box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); */
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.form-control-autocomplete:hover {
+    background-color: #1c345d;
+    color: #ffffff;
+}
+
+.ulDatatable {
+    margin: 0;
+    padding: 0;
+    list-style-type:none;
+}
+
+.forbidden {
+    cursor: not-allowed;
+}

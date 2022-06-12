@@ -1,0 +1,100 @@
+<!-- <div class="search-1 m-t-sm-40"> -->
+<div class="m-t-sm-40">
+    <div class="container">
+        <div class="search-option p-lg-30 p-b-lg-15 p-b-sm-30 p-r-sm-45 p-xs-15">
+            <div class="row">
+                <div class="mobileBanner col-xs-12 col-md-12">
+                    <h3 class="titleMobileUp0">
+                        <b class="titleMobileUp0">JC Ugarte</b> <br>
+                        Respaldamos tu inversión
+                    </h3>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <button type="button" onClick="window.location.href = '/store/cars';" class="ht-btn btn-lg background-red">
+                            <i class="fa fa-car"></i> Ver todos los vehículos
+                        </button>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <form action="{{ route('store.cars') }}">
+                        @method('get')
+                        <div class="col-md-8 col-lg-8">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 m-b-lg-15 p-r-lg-0 col-xs-6">
+                                    <div class="form-group">
+                                        <br class="mobileBanner">
+                                        <label style="color: #fff;">Transmisión</label>
+                                        <select name="filter_transmision" class="form-control">
+                                            <option style="color: #000000;" value="ALL">TODOS</option>
+                                            <option style="color: #000000;" value="AT">AUTOMÁTICO</option>
+                                            <option style="color: #000000;" value="MT">MANUAL</option>
+                                            <option style="color: #000000;" value="SE">SECUENCIAL</option>
+                                            <option style="color: #000000;" value="A&S">AT & SEC</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 m-b-lg-15 p-r-lg-0 col-xs-6">
+                                    <div class="form-group">
+                                        <br class="mobileBanner">
+                                        <label style="color: #fff;">Marca</label>
+                                        <select name="filter_brand" class="form-control">
+                                            <option value="0">Todas las marcas</option>
+                                            @foreach ($brands as $brand)
+                                                <option style="color: #000000;" value="{{ $brand->id }}"> {{ $brand->name }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 m-b-lg-15 p-r-lg-0 col-xs-6">
+                                    <div class="form-group">
+                                        <label style="color: #fff;">Año (Desde)</label>
+                                        <input type="text" name="filter_year_since" class="form-control" placeholder="Desde">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 m-b-lg-15 p-r-lg-0 col-xs-6">
+                                    <div class="form-group">
+                                        <label style="color: #fff;">Tracción</label>
+                                        <select name="filter_trax" class="form-control">
+                                            <option style="color: #000000;" value="4X2">4X2</option>
+                                            <option style="color: #000000;" value="4X4">4X4</option>
+                                            <option style="color: #000000;" value="AWD">AWD</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 m-b-lg-15 p-r-lg-0 col-xs-6">
+                                    <div class="form-group">
+                                        <label style="color: #fff;">Modelo</label>
+                                        <select name="filter_model" class="form-control">
+                                            <option value="0">Todos los modelos</option>
+                                            @foreach ($models as $model)
+                                                <option style="color: #000000;" value="{{ $model->id }}"> {{ $model->name }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 m-b-lg-15 p-r-lg-0 col-xs-6">
+                                    <div class="form-group">
+                                        <label style="color: #fff;">Año (Hasta)</label>
+                                        <input type="text" name="filter_year_to" class="form-control" placeholder="Hasta">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label style="color: #fff;">Rango de precios</label>
+                            <input type="text" name="filter_price" disabled class="slider_amount m-t-xs-0 m-t-sm-10">
+                            <div class="slider-range"></div>
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                        <br><br>
+                            <button type="submit" class="ht-btn btn-lg pull-right pull-left">
+                                <i class="fa fa-search"></i> Buscar vehículos
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

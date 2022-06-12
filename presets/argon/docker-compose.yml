@@ -1,0 +1,33 @@
+version: '3'
+services:
+#   sqlserver:
+#     restart: always
+#     image: mcr.microsoft.com/mssql/server:2019-latest
+#     user: '0:0'
+#     container_name: sqlserver2019
+#     ports:
+#       - 1433:1433
+#     environment:
+#       ACCEPT_EULA: Y
+#       SA_PASSWORD: N10m@ds2021!
+#     volumes:
+#       - ~/docker/sqlserver-data:/var/opt/mssql
+#     networks:
+#       - db_network
+
+  argon_laravel:
+    # network_mode: host
+    image: webdevops/php-nginx:7.4
+    restart: always
+    ports:
+        - 8200:80
+    volumes:
+        - /home/daniel/Documentos/argon-laravel:/app:rw
+    environment:
+          - WEB_DOCUMENT_ROOT=/app/src
+    
+networks:
+  db_network:
+    driver: bridge
+  web_network:
+    driver: bridge

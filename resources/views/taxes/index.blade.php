@@ -142,9 +142,9 @@ active
         },
         "columns" : [
                 {'data':   function (data) {
-                    var message = "RUC";
+                    var message = "CANCHA";
                     if (data.type != 1) {
-                    message = "RUS";
+                    message = "BAR";
                     }
                     return message;
                 }},

@@ -63,7 +63,7 @@ active
                             <h3 class="mb-0">Resumen de Reservas</h3>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="#" onclick="openCalendarView();" class="btn btn btn-secondary">Ver calendario</a>
+                            <a href="#" onclick="openCalendarView();" class="btn btn btn-default">Ver calendario</a>
                         </div>
                     </div>
                 </div>

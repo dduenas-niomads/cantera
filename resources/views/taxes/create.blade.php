@@ -76,8 +76,8 @@ active
 								<div class="form-group">
 									<label class="form-control-label" for="input-type">{{ __('Tipo de RUC') }}</label>
 									<select name="type" id="input-type" class="form-control ">
-										<option selected value="1">RUC</option>
-										<option value="2">RUS</option>
+										<option selected value="1">CANCHA</option>
+										<option value="2">BAR</option>
 									</select>
 								</div>
 								<div class="form-group">

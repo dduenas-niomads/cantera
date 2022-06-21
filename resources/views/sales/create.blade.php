@@ -400,11 +400,19 @@ active
 		var newPayment = document.getElementById('input_new_payment').value;
 		if (parseFloat(newPayment) > 0) {
 			// monto del adelanto
+			var reservationTime_ = document.getElementById('reservationTime_');
+			var reservationName_ = document.getElementById('reservationName_');
+			var reservationTimeText_ = "";
+			var reservationNameText_ = "";
+			if (reservationTime_ && reservationName_) {
+				reservationTimeText_ = reservationTime_.value;
+				reservationNameText_ = reservationName_.value;
+			}
 			var trCode = new Date();
 			document.getElementById('input_new_payment').value = "0";
 			addNewItem({
 				"id": "999999",
-				"name": "Adelanto",
+				"name": "Adelanto para reserva: " + reservationNameText_ + " (Tiempo: " + reservationTimeText_ + ")",
 				"code": "ADELANTO-" + reservationCode,
 				"quantity": 1,
 				"price": newPayment,

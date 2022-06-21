@@ -10,6 +10,8 @@
                 </div>
                 <div class="col-md-4 col-6">
                     <label for="">Fecha y hora</label>
+                    <input type="hidden" id="reservationName_" value='{{ $reservation->reservation_date }} {{ $reservation->reservation_hour_hh }}:{{ str_pad($reservation->reservation_hour_mm, 2, "0", STR_PAD_LEFT) }} {{ $reservation->reservation_hour_ampm }}'>
+                    <input type="hidden" id="reservationTime_" value='{{ $reservation->reservation_time }} minutos y {{ $reservation->additional_time }} extra'>
                     <p>{{ $reservation->reservation_date }} {{ $reservation->reservation_hour_hh }}:{{ str_pad($reservation->reservation_hour_mm, 2, "0", STR_PAD_LEFT) }} {{ $reservation->reservation_hour_ampm }}</p>
                 </div>
                 <div class="col-md-4 col-6">

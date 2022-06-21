@@ -107,6 +107,7 @@ active
     $(document).ready(function() {
         $('#saleListDataTable').DataTable({
             // paging: false
+            'order': [[ 4, "desc" ]],
             "lengthChange": false,
             "language": {
                 "url": "{{ asset('argon') }}/js/datatables.ES.json"

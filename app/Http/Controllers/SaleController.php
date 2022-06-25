@@ -569,6 +569,21 @@ class SaleController extends Controller
         return $bodyComprobante;
     }
 
+    public function apiFeResend($saleId = null)
+    {
+        $response = false;
+        $sale = Sale::find($saleId);
+        if (!is_null($sale) && !is_null($sale->fe_request)) {
+            $request = HttpClient::withHeaders([
+                'Authorization' => 'Bearer ' . Auth::user()->access_token
+            ])->post(env('SUNAT_FE_API_URL') . 'boleta.php', $sale->fe_request);
+            self::saveInfoRequest($sale, $request);
+            $response = true;
+        }
+
+        return $response;
+    }
+
     private static function saveInfoRequest($sale, $request)
     {
         if (!is_null($request) && $request->successful()) {

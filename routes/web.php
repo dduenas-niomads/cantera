@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::post('/api/movements', 'App\Http\Controllers\MovementController@apiStore');
 
+	Route::get('/api/sales/fe-resend/{saleId}', 'App\Http\Controllers\SaleController@apiFeResend');
 	Route::post('/api/sales', 'App\Http\Controllers\SaleController@apiStore');
 	Route::get('/api/sales-by-reservation-id/{reservationId}', 'App\Http\Controllers\SaleController@apiSalesByReservationId');
 });

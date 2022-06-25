@@ -13,6 +13,7 @@ class Reservation extends Model
     const TABLE_NAME = 'reservations';
     const MODULE_NAME = 'reservations';
     const STATE_INACTIVE = 0;
+    const DESTROY_ALL = 2;
     const STATE_ACTIVE = 1;
     const STATE_PAYED = 2;
     const STATE_DELETE = 0;

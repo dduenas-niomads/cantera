@@ -635,9 +635,15 @@ active
     function destroyReservation() {
         var confirm = window.confirm("¿Está seguro de anular esta reserva?");
         if (confirm) {
+            var reservationOption = document.getElementById('options_modal_reservation_destroy');
+            if (reservationOption) {
+                reservationOption = reservationOption.value;
+            } else {
+                reservationOption = 0;
+            }
             document.getElementById('options_modal_destroy_button').disabled = true;
             document.getElementById('options_modal_destroy_button').innerHTML = "Procesando...";
-            $.get("/api/reservations-destroy/" + reservation.id, function(data, status) {
+            $.get("/api/reservations-destroy/" + reservation.id + "?reservation_option=" + reservationOption, function(data, status) {
                 alert(data.message);
                 refreshOptionsModal();
                 calendar.refetchEvents();
@@ -687,10 +693,11 @@ active
             right: 'timeGridWeek,timeGridDay,list'
         },
         headerToolbar: {
-            left: '',
+            left: 'prev,next',
             center: 'title',
             right: ''
         },
+      titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' },
         eventClick: function(info) {
             if (info.event.extendedProps) {
                 openInfoEventModal(info.event.extendedProps);

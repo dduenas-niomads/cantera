@@ -55,6 +55,7 @@ active
                                     <th scope="col" class="thTaxationMiddle">Cliente</th>
                                     <th scope="col" class="thTaxationMiddle">Total venta</th>
                                     <th scope="col" class="thTaxationMiddle">Fecha</th>
+                                    <th scope="col" class="thTaxationMiddle">Estado</th>
                                     <th scope="col" class="thTaxationRight"></th>
                                 </tr>
                             </thead>
@@ -66,6 +67,17 @@ active
                                     <td>{{ $sale->client->name }} ({{ $sale->client->document_number }})</td>
                                     <td>{{ $sale->total_amount }}</td>
                                     <td>{{ $sale->created_at }}</td>
+                                    @php
+                                        $sunatStatus = "Sin emitir";
+                                        if (!is_null($sale->fe_response)) {
+                                            if ($sale->type_document === "03") {
+                                                $sunatStatus = $sale->fe_response['respuesta'];
+                                            } else {
+                                                $sunatStatus = "ok";
+                                            }
+                                        }
+                                    @endphp
+                                    <td>{{ $sunatStatus }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,9 +88,9 @@ active
                                                 @if (!is_null($sale->fe_url_pdf))
                                                     <a class="dropdown-item" href="{{ $sale->fe_url_pdf }}">Ver documento</a>
                                                 @else
-                                                    <a target="_blank" class="dropdown-item" href="#">No tiene documento</a>
+                                                    <button class="dropdown-item" onclick="feResend({{ $sale->id }});">Sin documento - Volver a emitir</button>
                                                 @endif
-                                                <a class="dropdown-item" href="#">Anular venta</a>
+                                                <button class="dropdown-item" onclick="feDelete({{ $sale->id }});">Anular venta</button>
                                             </div>
                                         </div>
                                     </td>
@@ -98,12 +110,34 @@ active
     </div>
 </div>
 
+<div class="modal fade" id="feResendModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2 class="modal-title" id="sales_modal_code">Emitiendo documento de venta. Por favor, espere un momento...</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('js')
 <script src="{{ asset('argon') }}/js/jquery.dataTables.min.js"></script>
 <script src="{{ asset('argon') }}/js/dataTables.bootstrap4.min.js"></script>
 <script>
+    function feResend(saleId) {
+        $('#feResendModal').modal({ backdrop: 'static', keyboard: false });
+        $.ajax({
+            url: "/api/sales/fe-resend/" + saleId,
+            type: 'GET'
+        }).done(function() {
+            window.location.replace("/sales");
+        });
+    }
+    function feDelete(saleId) {
+        alert("Anulando venta: " + saleId);
+    }
     $(document).ready(function() {
         $('#saleListDataTable').DataTable({
             // paging: false

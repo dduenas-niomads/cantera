@@ -409,11 +409,13 @@ class ReservationController extends Controller
 
         if ($greatherThan) {
             # code...
-            $list = $this->apiIndexCount($dateStart->toIsoString(), $dateEnd->subMinute()->toIsoString(), $canchaId, $clientId);
+            $list = $this->apiIndexCount($dateStart->addMinute()->toIsoString(), $dateEnd->subMinute()->toIsoString(), $canchaId, $clientId);
             if (count($list) > 0) {
+                $dateStart->subMinute();
                 $dateEnd->addMinute();
                 return [false, "Existen reservas en ese horario."];
             }
+            $dateStart->subMinute();
             $dateEnd->addMinute();
             return [true];
         } else {
@@ -498,6 +500,27 @@ class ReservationController extends Controller
             $reservation->flag_active = Reservation::STATE_DELETE;
             $reservation->deleted_at = date("Y-m-d H:i:s");
             $reservation->save();
+            $params = $request->all();
+            if (isset($params['reservation_option']) && 
+                (int)$params['reservation_option'] === Reservation::DESTROY_ALL) {
+                # code
+                $reservationPatern = null;
+                if (!is_null($reservation->reservations_id)) {
+                    $reservationPatern = $reservation->reservations_id;
+                } else {
+                    $reservationPatern = $reservation->id;
+                }
+                if (!is_null($reservationPatern)) {
+                    Reservation::whereNull(Reservation::TABLE_NAME . '.deleted_at')
+                        ->where(Reservation::TABLE_NAME . '.reservations_id', $reservationPatern)
+                        ->where(Reservation::TABLE_NAME . '.id', '>', $reservation->id)
+                        ->update([
+                            'deleted_by' => Auth::user()->id,
+                            'flag_active' => Reservation::STATE_DELETE,
+                            'deleted_at' => date("Y-m-d H:i:s")
+                        ]);
+                }
+            }
             $message = "La reserva se eliminó correctamente.";
             $messageClass = "success";
             $httpStatus = 200;

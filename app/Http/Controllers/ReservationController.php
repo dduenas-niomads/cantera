@@ -500,6 +500,7 @@ class ReservationController extends Controller
             $reservation->flag_active = Reservation::STATE_DELETE;
             $reservation->deleted_at = date("Y-m-d H:i:s");
             $reservation->save();
+            $count = 1;
             $params = $request->all();
             if (isset($params['reservation_option']) && 
                 (int)$params['reservation_option'] === Reservation::DESTROY_ALL) {
@@ -511,17 +512,19 @@ class ReservationController extends Controller
                     $reservationPatern = $reservation->id;
                 }
                 if (!is_null($reservationPatern)) {
-                    Reservation::whereNull(Reservation::TABLE_NAME . '.deleted_at')
+                    $queryUpdate = Reservation::whereNull(Reservation::TABLE_NAME . '.deleted_at')
                         ->where(Reservation::TABLE_NAME . '.reservations_id', $reservationPatern)
-                        ->where(Reservation::TABLE_NAME . '.id', '>', $reservation->id)
-                        ->update([
+                        ->where(Reservation::TABLE_NAME . '.id', '>', $reservation->id);
+                    $countQueryUpdate = $queryUpdate->count();
+                    $queryUpdate->update([
                             'deleted_by' => Auth::user()->id,
                             'flag_active' => Reservation::STATE_DELETE,
                             'deleted_at' => date("Y-m-d H:i:s")
                         ]);
+                    $count = $count + $countQueryUpdate;
                 }
             }
-            $message = "La reserva se eliminó correctamente.";
+            $message = "La reserva se eliminó correctamente. Fueron: " . $count . " eliminados.";
             $messageClass = "success";
             $httpStatus = 200;
         } else {

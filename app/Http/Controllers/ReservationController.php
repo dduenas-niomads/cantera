@@ -27,14 +27,14 @@ class ReservationController extends Controller
         $user = Auth()->user();
         if ($user->rols_id === 1) {
             $cancha = new \stdClass();
-            $cancha->id = 1;
-            $cancha->name = "Cancha 1";
+            $cancha->id = $user->cancha_id;
+            $cancha->name = "Cancha " . $user->cancha_id;
             $user->cancha = $cancha;
             return view('reservations.index_salers', compact('user'));
         } else {
             $cancha = new \stdClass();
-            $cancha->id = 1;
-            $cancha->name = "Cancha 1";
+            $cancha->id = $user->cancha_id;
+            $cancha->name = "Cancha " . $user->cancha_id;
             $user->cancha = $cancha;
             return view('reservations.index', compact('user'));
         }
@@ -63,7 +63,7 @@ class ReservationController extends Controller
             ->whereNull(Reservation::TABLE_NAME . '.deleted_at');
 
         if ($user->rolls_id !== 1) {
-            $list = $list->where(Reservation::TABLE_NAME . '.cancha_id', 1);
+            $list = $list->where(Reservation::TABLE_NAME . '.cancha_id', $user->cancha_id);
         }
 
         if (isset($params['search']) && isset($params['search']['value'])) {

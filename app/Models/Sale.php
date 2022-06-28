@@ -27,6 +27,7 @@ class Sale extends Model
         //Table Rows
         'id',
         
+        'cancha_id',
         'reservation_id',
         'client_id',
         'document_id',

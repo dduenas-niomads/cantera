@@ -41,8 +41,12 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $list = Movement::whereNull(Movement::TABLE_NAME . '.deleted_at')
-            ->get();
+        $user = Auth()->user();
+        $list = Movement::whereNull(Movement::TABLE_NAME . '.deleted_at');
+        if ($user->rolls_id !== 1) {
+            $list = $list->where(Movement::TABLE_NAME . '.cancha_id', $user->cancha_id);
+        }
+        $list = $list->get();
         return view('movements.index', compact('list'));
     }
 
@@ -79,7 +83,7 @@ class MovementController extends Controller
             }
             // movement
             $movement = new Movement();
-            $movement->cancha_id = 1;
+            $movement->cancha_id = $user->cancha_id;
             $movement->type_movement = $params['info']['type_document'];
             $movement->type_movement_name = Movement::MOVEMENT_TYPE_01;
             if((int)$movement->type_movement === 2) {

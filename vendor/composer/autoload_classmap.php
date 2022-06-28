@@ -57,6 +57,7 @@ return array(
     'App\\Models\\CarEntryExpense' => $baseDir . '/app/Models/CarEntryExpense.php',
     'App\\Models\\Client' => $baseDir . '/app/Models/Client.php',
     'App\\Models\\ExchangeRate' => $baseDir . '/app/Models/ExchangeRate.php',
+    'App\\Models\\Movement' => $baseDir . '/app/Models/Movement.php',
     'App\\Models\\MsCostPerDay' => $baseDir . '/app/Models/MsCostPerDay.php',
     'App\\Models\\MsDocument' => $baseDir . '/app/Models/MsDocument.php',
     'App\\Models\\MsMaster' => $baseDir . '/app/Models/MsMaster.php',

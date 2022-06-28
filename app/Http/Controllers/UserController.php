@@ -55,7 +55,9 @@ class UserController extends Controller
             'email_verified_at' => now(),
             'password' => Hash::make($params['password']),
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
+            'cancha_id' => (isset($params['cancha_id']) ? $params['cancha_id'] : 1),
+            'phone' => (isset($params['phone']) ? $params['phone'] : null)
         ]);
 
         $message = "Usuario creado correctamente";

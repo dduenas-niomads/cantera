@@ -31,8 +31,12 @@ class SaleController extends Controller
      */
     public function index(Request $request)
     {
-        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
-            ->with('client')
+        $user = Auth()->user();
+        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
+        if ($user->rolls_id !== 1) {
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.cancha_id', $user->cancha_id);
+        }
+        $saleList = $saleList->with('client')
             ->with('document')
             ->get();
             
@@ -116,7 +120,8 @@ class SaleController extends Controller
                 $messageClass = "warning";
             }
         }
-        $rucs = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
+        $rucs = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')
+            ->where(Tax::TABLE_NAME . '.cancha_id', Auth()->user()->cancha_id);
         if (!is_null($reservation)) {
             $rucs = $rucs->where('type', 1);
         } else {
@@ -350,7 +355,13 @@ class SaleController extends Controller
                     $reservation = ReservationController::validateReservationInfo($params['info']);
                 }
                 // create sale
+                $user = Auth()->user();
+                $canchaId = 1;
+                if (!is_null($user)) {
+                    $canchaId = $user->cancha_id;
+                }
                 $sale = new Sale();
+                $sale->cancha_id = $canchaId;
                 $sale->reservation_id = !is_null($reservation) ? $reservation->id : null;
                 $sale->client_id = $client->id;
                 $sale->document_id = $params['info']['document_id'];
@@ -503,8 +514,8 @@ class SaleController extends Controller
                 "pdf" => env("SUNAT_FE_CREAR_PDF"),
                 "print_size" => env("SUNAT_FE_PRINT_SIZE"),
                 "print_title" => $printTitle,
-                "print_phone" => env("SUNAT_FE_PHONE_1"),
-                "print_address" => env("SUNAT_FE_ADDRESS_1"),
+                "print_phone" => env("SUNAT_FE_PHONE_") . Auth()->user()->cancha_id,
+                "print_address" => env("SUNAT_FE_ADDRESS_") . Auth()->user()->cancha_id,
                 "print_email" => env("SUNAT_FE_EMAIL"),
                 "print_image" => env("SUNAT_FE_IMAGE"),
                 "tipo_proceso" => env("SUNAT_FE_TIPO_PROCESO"),

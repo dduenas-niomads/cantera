@@ -17,7 +17,12 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clientList = Client::whereNull(Client::TABLE_NAME . '.deleted_at')->get();
+        $user = Auth()->user();
+        $clientList = Client::whereNull(Client::TABLE_NAME . '.deleted_at');
+        // if ($user->rolls_id !== 1) {
+        //     $clientList = $clientList->where(Client::TABLE_NAME . '.cancha_id', $user->cancha_id);
+        // }
+        $clientList = $clientList->get();
         $typeDocumentNames = Client::TYPE_DOCUMENT_NAMES;
         return view(Client::MODULE_NAME . '.index', compact('clientList', 'typeDocumentNames'));
     }

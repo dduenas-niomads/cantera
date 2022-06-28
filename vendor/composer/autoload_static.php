@@ -718,6 +718,7 @@ class ComposerStaticInit47c83ce3dacf1f06b6c53d4950021af3
         'App\\Models\\CarEntryExpense' => __DIR__ . '/../..' . '/app/Models/CarEntryExpense.php',
         'App\\Models\\Client' => __DIR__ . '/../..' . '/app/Models/Client.php',
         'App\\Models\\ExchangeRate' => __DIR__ . '/../..' . '/app/Models/ExchangeRate.php',
+        'App\\Models\\Movement' => __DIR__ . '/../..' . '/app/Models/Movement.php',
         'App\\Models\\MsCostPerDay' => __DIR__ . '/../..' . '/app/Models/MsCostPerDay.php',
         'App\\Models\\MsDocument' => __DIR__ . '/../..' . '/app/Models/MsDocument.php',
         'App\\Models\\MsMaster' => __DIR__ . '/../..' . '/app/Models/MsMaster.php',

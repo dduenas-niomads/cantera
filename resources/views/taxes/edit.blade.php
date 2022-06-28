@@ -67,19 +67,26 @@ active
 											value="{{ (!is_null($tax) ? $tax->description : '') }}" >
 									</div>
 								</div>
-							</div>
-							<div class="col-md-6">
 								<div class="form-group">
 									<label class="form-control-label" for="input-top">{{ __('Máximo de emisión') }}</label>
 									<input type="number" name="top" id="input-top" class="form-control " placeholder="{{ __('Ingrese máximo de emisión') }}" value="{{ (!is_null($tax) ? $tax->top : '0') }}" required>
 								</div>
+							</div>
+							<div class="col-md-6">
 								<div class="form-group">
 									<label class="form-control-label" for="input-type">{{ __('Tipo de RUC') }}</label>
 									<select name="type" id="input-type" class="form-control ">
-										<option selected value="1">CANCHA</option>
-										<option value="2">BAR</option>
+										<option {{ ((int)$tax->type === 1) ? 'selected':'' }} value="1">CANCHA</option>
+										<option {{ ((int)$tax->type === 2) ? 'selected':'' }} value="2">BAR</option>
 									</select>
 								</div>
+                                <div class="form-group{{ $errors->has('cancha_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-cancha_id">{{ __('Cancha') }}</label>
+                                    <select name="cancha_id" class="form-control ">
+										<option {{ ((int)$tax->cancha_id === 1) ? 'selected':'' }} value="1">CANCHA 1</option>
+										<option {{ ((int)$tax->cancha_id === 2) ? 'selected':'' }} value="2">CANCHA 2</option>
+                                    </select>
+                                </div>
 								<div class="form-group">
 									<label class="form-control-label" for="input-flag_active">{{ __('Estado') }}</label>
 									<select name="flag_active" id="input-flag_active" class="form-control ">

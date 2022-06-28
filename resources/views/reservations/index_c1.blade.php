@@ -65,7 +65,7 @@ active
                 <br>
                     <div class="row">
                         <div class="col-md-12">
-                            <h1 style="text-align: center;">CANCHA 1</h1>
+                            <h1 style="text-align: center;">CANCHA {{ Auth()->user()->cancha_id }}</h1>
                             <div id='calendar'></div>
                         </div>
                         <div class="col-md-12">
@@ -74,7 +74,7 @@ active
                                     border-radius: 5px;
                                     padding: 10px;">
                                 <p>
-                                    <strong>Cancha 1</strong>
+                                    <strong>Cancha {{ Auth()->user()->cancha_id }}</strong>
                                 </p>
                                 <hr>
                                 <div id="cancha_1_events">

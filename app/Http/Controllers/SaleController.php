@@ -514,8 +514,8 @@ class SaleController extends Controller
                 "pdf" => env("SUNAT_FE_CREAR_PDF"),
                 "print_size" => env("SUNAT_FE_PRINT_SIZE"),
                 "print_title" => $printTitle,
-                "print_phone" => env("SUNAT_FE_PHONE_") . Auth()->user()->cancha_id,
-                "print_address" => env("SUNAT_FE_ADDRESS_") . Auth()->user()->cancha_id,
+                "print_phone" => env("SUNAT_FE_PHONE_" . Auth()->user()->cancha_id),
+                "print_address" => env("SUNAT_FE_ADDRESS_" . Auth()->user()->cancha_id),
                 "print_email" => env("SUNAT_FE_EMAIL"),
                 "print_image" => env("SUNAT_FE_IMAGE"),
                 "tipo_proceso" => env("SUNAT_FE_TIPO_PROCESO"),
@@ -604,7 +604,9 @@ class SaleController extends Controller
             $result = $request->json();
             $sale->fe_response = $result;
             $sale->fe_status_code = 1;
-            $sale->fe_url_pdf = str_replace('..', env('SUNAT_FE_WEB_URL'), $result['ruta_pdf']);
+            if (!is_null($result)) {
+                $sale->fe_url_pdf = str_replace('..', env('SUNAT_FE_WEB_URL'), $result['ruta_pdf']);
+            }
             $sale->save();
         } else {
             $message = "Comprobante emitido correctamente. No hubo respuesta directa.";

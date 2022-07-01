@@ -372,6 +372,7 @@ active
 				client_name: document.getElementById('input-client_name').value,
 				type_document: document.getElementById('input-type_document').value,
 				document_id: document.getElementById('input-document_number').value,
+				commentary: document.getElementById('input-commentary').value,
 				reservation_id: reservationCode,
 				reservation_cost_pr_hour: costPrHour
 			},

@@ -14,6 +14,10 @@
             <br>
             <label for="">Total por cobrar:</label>
             <h1 id="totalAmount">S/ 0.00</h1>
+            <br>
+            <label for="">Comentarios adicionales</label>
+            <input type="text" class="form-control" id="input-commentary" placeholder="Agrega los tipos de pago o detalles adicionales de la venta">
+            <br>
         </div>
     </div>
 </div>

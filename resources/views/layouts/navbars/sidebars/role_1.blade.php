@@ -23,7 +23,7 @@
                     </a>
                 </li>
                 <li class="nav-item @yield('nav-reports-sales')">
-                    <a href="#" class="nav-link">
+                    <a href="/reports/sales" class="nav-link">
                         <span class="sidenav-normal"> Reporte de ventas </span>
                     </a>
                 </li>

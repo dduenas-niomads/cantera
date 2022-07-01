@@ -31,6 +31,7 @@ class Sale extends Model
         'reservation_id',
         'client_id',
         'document_id',
+        'commentary',
 
         'period',
         'items',

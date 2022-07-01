@@ -157,8 +157,8 @@ class TaxController extends Controller
         if (!is_null($tax)) {
             $taxAmount = self::getAmount($period, $taxId, $serie);
             $newTaxAmount = $amount + $taxAmount;
-            if ($tax->type = Tax::TYPE_RUS) {
-                if ((float)$newTaxAmount <= $tax->top) {
+            if ($serie === "03") {
+                if ((float)$newTaxAmount <= (float)$tax->top) {
                     $result = true;
                 }
             } else {

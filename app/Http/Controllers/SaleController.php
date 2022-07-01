@@ -33,7 +33,7 @@ class SaleController extends Controller
     {
         $user = Auth()->user();
         $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
-        if ($user->rolls_id !== 1) {
+        if ($user->rols_id !== 1) {
             $saleList = $saleList->where(Sale::TABLE_NAME . '.cancha_id', $user->cancha_id);
         }
         $saleList = $saleList->with('client')
@@ -45,15 +45,31 @@ class SaleController extends Controller
 
     public function showReport(Request $request)
     {
-        $this->saleAdjust($request);
         $params = $request->all();
-        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
-            ->with('car');
-        if (isset($params['period']) && $params['period'] !== '0') {
-            $saleList = $saleList->where(Sale::TABLE_NAME . '.sale_date', 'LIKE', '%' . $params['period'] . '%');
+        // dd($params);
+        $cancha_name = "Todas las canchas";
+        $selectedDate = date("Y-m-d");
+        $taxes = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
+        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
+        $user = Auth()->user();
+        if ($user->rols_id != 1) {
+            $cancha_name = "Cancha " . $user->cancha_id;
+            $taxes = $taxes->where(Tax::TABLE_NAME . '.cancha_id', $user->cancha_id);
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.cancha_id', $user->cancha_id);
         }
-        $saleList = $saleList->get();
-        return view(Sale::MODULE_NAME . '.report', compact('saleList'));
+        if (isset($params['date']) && $params['date'] !== '0') {
+            $selectedDate = $params['date'];
+        }
+        if (isset($params['document_id']) && (int)$params['document_id'] !== 0) {
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.document_id', $params['document_id']);
+        }
+        if (isset($params['type_document']) && (int)$params['type_document'] !== 0) {
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.type_document', $params['type_document']);
+        }
+        $saleList = $saleList->where(Sale::TABLE_NAME . '.created_at', 'LIKE', '%' . $selectedDate . '%');
+        $saleList = $saleList->with('client')->with('document')->get();
+        $taxes = $taxes->get();
+        return view(Sale::MODULE_NAME . '.report', compact('saleList', 'cancha_name', 'taxes', 'selectedDate'));
     }
 
     public function saleAdjust(Request $request)
@@ -348,6 +364,7 @@ class SaleController extends Controller
             }
             // validate document
             $taxValidation = TaxController::validateTaxAmount(date("Ym"), $params['info']['document_id'], $params['info']['type_document'], $totalSaleCost);
+            // dd(date("Ym"), $params['info']['document_id'], $params['info']['type_document'], $totalSaleCost, $taxValidation);
             if ($taxValidation) {
                 // get reservation and update price per hour
                 $reservation = null;
@@ -367,6 +384,7 @@ class SaleController extends Controller
                 $sale->document_id = $params['info']['document_id'];
                 $sale->items = $params['items'];
                 $sale->type_document = $params['info']['type_document'];
+                $sale->commentary = isset($params['info']['commentary']) ? $params['info']['commentary'] : null;
                 $sale->serie = self::findSerie($params['info']['type_document']);
                 $sale->correlative = self::findNextCorrelative($sale->document_id, $sale->serie);
                 $sale->total_amount = $totalSaleCost;
@@ -393,10 +411,15 @@ class SaleController extends Controller
                 if (!is_null($sale)) {
                     $message = "La venta se creó correctamente. Pero no se creó el documento de facturación.";
                     $status = 200;
-                    $responses_ = self::createFeDocument($sale->type_document, $sale);
-                    if (!is_null($responses_)) {
-                        $message = $responses_[0];
-                        $status = $responses_[1];
+                    try {
+                        $responses_ = self::createFeDocument($sale->type_document, $sale);
+                        if (!is_null($responses_)) {
+                            $message = $responses_[0];
+                            $status = $responses_[1];
+                        }
+                    } catch (\Throwable $th) {
+                        $message = "La venta se creó pero no se pudo emitir el documento electrónicamente. Reenvíe el documento desde el listado de ventas.";
+                        $status = 201;
                     }
                 }
             } else {
@@ -584,16 +607,24 @@ class SaleController extends Controller
     public function apiFeResend($saleId = null)
     {
         $response = false;
+        $status = 400;
         $sale = Sale::find($saleId);
         if (!is_null($sale) && !is_null($sale->fe_request)) {
-            $request = HttpClient::withHeaders([
-                'Authorization' => 'Bearer ' . Auth::user()->access_token
-            ])->post(env('SUNAT_FE_API_URL') . 'boleta.php', $sale->fe_request);
-            self::saveInfoRequest($sale, $request);
-            $response = true;
+            try {
+                $request = HttpClient::withHeaders([
+                    'Authorization' => 'Bearer ' . Auth::user()->access_token
+                ])->post(env('SUNAT_FE_API_URL') . 'boleta.php', $sale->fe_request);
+                self::saveInfoRequest($sale, $request);
+                $response = true;
+                $status = 200;
+            } catch (\Throwable $th) {
+                $response = false;
+            }
         }
 
-        return $response;
+        return response([
+            "result" => $response
+        ], $status);
     }
 
     private static function saveInfoRequest($sale, $request)

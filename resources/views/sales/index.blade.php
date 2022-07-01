@@ -128,12 +128,12 @@ active
 <script>
     function feResend(saleId) {
         $('#feResendModal').modal({ backdrop: 'static', keyboard: false });
-        $.ajax({
-            url: "/api/sales/fe-resend/" + saleId,
-            type: 'GET'
-        }).done(function() {
+        $.get("/api/sales/fe-resend/" + saleId, function(data, status) {
             window.location.replace("/sales");
-        });
+		}).fail(function(data, status) {
+            alert("No se pudo emitir el comprobante electrónicamente. Inténtelo más tarde.");
+            $('#feResendModal').modal('hide');
+		});
     }
     function feDelete(saleId) {
         alert("Anulando venta: " + saleId);

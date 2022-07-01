@@ -4,6 +4,22 @@
             <i class="ni ni-tv-2 text-danger"></i> {{ __('Dashboard') }}
         </a>
     </li>
+    <li class="nav-item @yield('nav-reports')">
+        <a class="nav-link" href="#navbar-reports"
+            data-toggle="collapse" role="button" 
+            aria-expanded="false" aria-controls="navbar-reports">
+            <i class="ni ni-chart-bar-32 text-danger"></i> {{ __('Reportes') }}
+        </a>
+        <div class="collapse @yield('nav-reports-collapse')" id="navbar-reports">
+            <ul class="nav nav-sm flex-column">
+                <li class="nav-item @yield('nav-reports-sales')">
+                    <a href="/reports/sales" class="nav-link">
+                        <span class="sidenav-normal"> Reporte de ventas </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
     <li class="nav-item @yield('nav-reservations')">
         <a class="nav-link" href="/reservations">
             <i class="ni ni-calendar-grid-58 text-danger"></i> {{ __('Reservas') }}

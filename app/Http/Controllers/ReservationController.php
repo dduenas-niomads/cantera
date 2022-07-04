@@ -399,16 +399,21 @@ class ReservationController extends Controller
         $dateStart = Carbon::parse($dateStartIsoString)->tz('America/Lima');
         $dateEnd = Carbon::parse($dateEndIsoString)->tz('America/Lima');
 
-        return $this->validateInSchedule($dateStart, $dateEnd, $timing, 1);
+        return $this->validateInSchedule($dateStart, $dateEnd, $timing);
     }
 
     public function validateInSchedule($dateStart = null, $dateEnd = null, $timing = 0, $canchaId = null, $clientId = null)
     {
         $dateNow = Carbon::now()->tz('America/Lima');
         $greatherThan = $dateStart->gt($dateNow);
-
+        $user = Auth()->user();
+        if (is_null($user)) {
+            return [false, "Error en permisos de usuario."];
+        }
         if ($greatherThan) {
-            # code...
+            if (is_null($canchaId)) {
+                $canchaId = $user->cancha_id;
+            }
             $list = $this->apiIndexCount($dateStart->addMinute()->toIsoString(), $dateEnd->subMinute()->toIsoString(), $canchaId, $clientId);
             if (count($list) > 0) {
                 $dateStart->subMinute();

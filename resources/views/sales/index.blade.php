@@ -54,8 +54,10 @@ active
                                     <th scope="col" class="thTaxationMiddle">Ticket</th>
                                     <th scope="col" class="thTaxationMiddle">Cliente</th>
                                     <th scope="col" class="thTaxationMiddle">Total venta</th>
-                                    <th scope="col" class="thTaxationMiddle">Fecha</th>
+                                    <th scope="col" class="thTaxationMiddle">Canal de pagos</th>
                                     <th scope="col" class="thTaxationMiddle">Estado</th>
+                                    <th scope="col" class="thTaxationMiddle">Comentarios</th>
+                                    <th scope="col" class="thTaxationMiddle">Fecha</th>
                                     <th scope="col" class="thTaxationRight"></th>
                                 </tr>
                             </thead>
@@ -63,21 +65,14 @@ active
                                 @foreach ($saleList as $sale)
                                 <tr>
                                     <td>{{ $sale->type_document }}</td>
-                                    <td>{{ $sale->serie }}-{{ str_pad($sale->correlative, 6, "0", STR_PAD_LEFT) }}</td>
+                                    <td>{{ $sale->document->document_number }} <br> {{ $sale->serie }}-{{ str_pad($sale->correlative, 6, "0", STR_PAD_LEFT) }}</td>
                                     <td>{{ $sale->client->name }} ({{ $sale->client->document_number }})</td>
-                                    <td>{{ $sale->total_amount }}</td>
+                                    <td>{{ number_format($sale->total_amount, 2) }}</td>
+                                    <td>{{ !is_null($sale->gateway) ? $sale->gateway->name : "" }}</td>
+                                    @include('layouts.utils.sunat_status')
+                                    <td>{{ $sale->sunatStatus }}</td>
+                                    <td>{{ $sale->commentary }}</td>
                                     <td>{{ $sale->created_at }}</td>
-                                    @php
-                                        $sunatStatus = "Sin emitir";
-                                        if (!is_null($sale->fe_response)) {
-                                            if ($sale->type_document === "03") {
-                                                $sunatStatus = $sale->fe_response['respuesta'];
-                                            } else {
-                                                $sunatStatus = "ok";
-                                            }
-                                        }
-                                    @endphp
-                                    <td>{{ $sunatStatus }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -120,6 +115,16 @@ active
     </div>
 </div>
 
+<div class="modal fade" id="feDeleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2 class="modal-title" id="sales_modal_code">Eliminando documento de venta. Por favor, espere un momento...</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('js')
@@ -127,7 +132,7 @@ active
 <script src="{{ asset('argon') }}/js/dataTables.bootstrap4.min.js"></script>
 <script>
     function feResend(saleId) {
-        $('#feResendModal').modal({ backdrop: 'static', keyboard: false });
+        $('#feResendModal').modal();
         $.get("/api/sales/fe-resend/" + saleId, function(data, status) {
             window.location.replace("/sales");
 		}).fail(function(data, status) {
@@ -136,12 +141,18 @@ active
 		});
     }
     function feDelete(saleId) {
-        alert("Anulando venta: " + saleId);
+        //$('#feDeleteModal').modal();
+        $.get("/api/sales/delete/" + saleId, function(data, status) {
+            window.location.replace("/sales");
+		}).fail(function(data, status) {
+            alert("No se pudo eliminar el comprobante electrónicamente. Inténtelo más tarde.");
+            //$('#feDeleteModal').modal('hide');
+		});
     }
     $(document).ready(function() {
         $('#saleListDataTable').DataTable({
             // paging: false
-            'order': [[ 4, "desc" ]],
+            'order': [[ 7, "desc" ]],
             "lengthChange": false,
             "language": {
                 "url": "{{ asset('argon') }}/js/datatables.ES.json"

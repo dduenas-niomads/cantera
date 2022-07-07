@@ -69,7 +69,7 @@
                     <label class="form-control-label" for="">{{ __('RUC de comprobante') }}</label>
                     <select name="document_number" id="input-document_number" class="form-control">
                         @foreach ($rucs as $keyR => $valueR)
-                            <option value="{{ $valueR->id }}">{{ $valueR->document_number }} {{ $valueR->name }} (Emitido este mes: S/ {{ $valueR->amount_pr_period }})</option>
+                            <option value="{{ $valueR->id }}">{{ $valueR->document_number }} {{ $valueR->name }} (Total BOLETAS {{ date("M Y") }}: S/ {{ number_format($valueR->amount_pr_period, 2) }})</option>
                         @endforeach
                     </select>
                 </div>

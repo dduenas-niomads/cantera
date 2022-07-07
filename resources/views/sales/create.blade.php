@@ -341,25 +341,35 @@ active
 	}
 
 	function lastStep() {
-		stepperValidation();
-		// show total
-		var totalAmount = 0;
-		items_.forEach(element => {
-			totalAmount = totalAmount + (parseFloat(element.quantity) * parseFloat(element.price));
-		});
-		document.getElementById('totalAmount').innerHTML = "S/ " + totalAmount;
-		// tbodyDetail
-		var items_detail = document.getElementById('tbodyDetail');
-		items_detail.innerHTML = "";
-		if (items_detail) {
-			items_.forEach(item => {
-				b = document.createElement("TR");
-				b.innerHTML += '<td>' + item.name + '</td>' +
-					'<td>' + item.quantity + '</td>' +
-					'<td>' + item.price + '</td>' +
-					'<td>' + (parseFloat(item.quantity)*parseFloat(item.price)) + '</td>'; 
-				items_detail.appendChild(b);
+		var clientId = document.getElementById('input-client_name_id').value;
+		if (clientId == "") {
+			alert("Antes de continuar, ingrese un cliente.")
+			return;
+		} else {
+			// show total
+			var totalAmount = 0;
+			items_.forEach(element => {
+				totalAmount = totalAmount + (parseFloat(element.quantity) * parseFloat(element.price));
 			});
+			if (totalAmount != 0) {
+				stepperValidation();
+				document.getElementById('totalAmount').innerHTML = "S/ " + totalAmount;
+				// tbodyDetail
+				var items_detail = document.getElementById('tbodyDetail');
+				items_detail.innerHTML = "";
+				if (items_detail) {
+					items_.forEach(item => {
+						b = document.createElement("TR");
+						b.innerHTML += '<td>' + item.name + '</td>' +
+							'<td>' + item.quantity + '</td>' +
+							'<td>' + item.price + '</td>' +
+							'<td>' + (parseFloat(item.quantity)*parseFloat(item.price)) + '</td>'; 
+						items_detail.appendChild(b);
+					});
+				}				
+			} else {
+				alert("No puede crear una venta sin productos o en monto cero.");
+			}
 		}
 	}
 
@@ -373,6 +383,7 @@ active
 				type_document: document.getElementById('input-type_document').value,
 				document_id: document.getElementById('input-document_number').value,
 				commentary: document.getElementById('input-commentary').value,
+				gateway_id: document.getElementById('gateway_id').value,
 				reservation_id: reservationCode,
 				reservation_cost_pr_hour: costPrHour
 			},

@@ -255,8 +255,19 @@ class ReservationController extends Controller
     {
         $reservation = new Reservation();
         // business fields
+        $reservationPrice = Reservation::DEFAULT_PRICE_PR_HOUR;
         $reservation->cancha_id = $params['reservation_cancha_id'];
         $reservation->client_id = $params['reservation_client_id'];
+        if (!is_null($reservation->cancha_id)) {
+            if ((int)$reservation->cancha_id === 1) {
+                $reservationPrice = Reservation::DEFAULT_PRICE_PR_HOUR_1;
+            } else {
+                $reservationPrice = Reservation::DEFAULT_PRICE_PR_HOUR_2;
+            }
+        }
+        if (isset($params['price_pr_hour'])) {
+            $reservationPrice = $params['price_pr_hour'];
+        }
         // date & time fields
         $reservation->reservation_date_start_iso = $dateStart->toIsoString();
         $reservation->reservation_date_end_iso = $dateEnd->toIsoString();
@@ -269,7 +280,7 @@ class ReservationController extends Controller
         $reservation->reservation_hour_ampm = $params['reservation_hour_ampm'];
         $reservation->reservation_time = isset($params['reservation_time']) ? $params['reservation_time'] : Reservation::DEFAULT_TIME;
         $reservation->reservations_id = isset($params['reservations_id']) ? $params['reservations_id'] : null;
-        $reservation->price_pr_hour = isset($params['price_pr_hour']) ? $params['price_pr_hour'] : Reservation::DEFAULT_PRICE_PR_HOUR;
+        $reservation->price_pr_hour = $reservationPrice;
         // save
         $reservation->save();
         return $reservation;

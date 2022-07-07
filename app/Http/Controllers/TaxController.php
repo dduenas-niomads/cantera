@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Tax;
+use App\Models\Sale;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -143,19 +144,25 @@ class TaxController extends Controller
             ->with( ['message' => $message, 'messageClass' => $messageClass ] );
     }
 
-    public static function getAmount($period = null, $taxId = null, $serie = null)
+    public static function getAmount($period = null, $taxId = null, $typeDocument = null)
     {
         # search on sales by period and serie
-        return random_int(3200, 7800);
+        $taxAmount = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
+            ->where(Sale::TABLE_NAME . '.flag_active', Sale::STATE_ACTIVE)
+            ->where(Sale::TABLE_NAME . '.period', $period)
+            ->where(Sale::TABLE_NAME . '.document_id', $taxId)
+            ->where(Sale::TABLE_NAME . '.type_document', $typeDocument)
+            ->get();
+        return $taxAmount->sum('total_amount');
     }
 
     public static function validateTaxAmount($period = null, $taxId = null, $serie = null, $amount = 0)
     {
         $result = false;
         $tax = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')
-            ->find($taxId);        
+            ->find($taxId);
         if (!is_null($tax)) {
-            $taxAmount = self::getAmount($period, $taxId, $serie);
+            $taxAmount = self::getAmount($period, $taxId, Sale::SALE_TYPE_INVOICE_B);
             $newTaxAmount = $amount + $taxAmount;
             if ($serie === "03") {
                 if ((float)$newTaxAmount <= (float)$tax->top) {

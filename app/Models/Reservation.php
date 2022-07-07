@@ -18,6 +18,8 @@ class Reservation extends Model
     const STATE_PAYED = 2;
     const STATE_DELETE = 0;
     const DEFAULT_PRICE_PR_HOUR = 100;
+    const DEFAULT_PRICE_PR_HOUR_1 = 100;
+    const DEFAULT_PRICE_PR_HOUR_2 = 85;
     const DEFAULT_TIME = 60;
     const DEFAULT_PAYMENT_ID = 999999;
     const ARRAY_ORDER = [

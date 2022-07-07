@@ -13,6 +13,7 @@ use App\Models\MsCostPerDay;
 use App\Models\CarEntryExpense;
 use App\Models\Car;
 use App\Models\User;
+use App\Models\Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Http as HttpClient;
@@ -136,6 +137,7 @@ class SaleController extends Controller
                 $messageClass = "warning";
             }
         }
+        # RUCS
         $rucs = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')
             ->where(Tax::TABLE_NAME . '.cancha_id', Auth()->user()->cancha_id);
         if (!is_null($reservation)) {
@@ -146,9 +148,12 @@ class SaleController extends Controller
         $rucs = $rucs->get();
             // ->withCount('amountperiod')
         foreach ($rucs as $key => $value) {
-            $value->amount_pr_period = TaxController::getAmount(date("Ym"), $value->id, TAX::DEFAULT_SERIE_03);
+            $value->amount_pr_period = TaxController::getAmount(date("Ym"), $value->id, Sale::SALE_TYPE_INVOICE_B);
         }
-        return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users'));
+        # GATEWAYS
+        $gateways = Gateway::whereNull(Gateway::TABLE_NAME . '.deleted_at')->get();
+        # return
+        return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users', 'gateways'));
     }
 
     public function edit($saleId, Request $request)
@@ -389,6 +394,7 @@ class SaleController extends Controller
                 $sale->correlative = self::findNextCorrelative($sale->document_id, $sale->serie);
                 $sale->total_amount = $totalSaleCost;
                 $sale->period = date("Ym");
+                $sale->gateway_id = isset($params['info']['gateway_id']) ? $params['info']['gateway_id'] : Sale::DEFAULT_GATEWAY;
                 $sale->save();
 
                 if (!is_null($reservation)) {
@@ -620,6 +626,26 @@ class SaleController extends Controller
             } catch (\Throwable $th) {
                 $response = false;
             }
+        }
+
+        return response([
+            "result" => $response
+        ], $status);
+    }
+
+    public function apiDelete($saleId = null)
+    {
+        $response = false;
+        $status = 400;
+        $sale = Sale::find($saleId);
+        if (!is_null($sale) && is_null($sale->fe_request_nulled)) {
+            $sale->flag_active = Sale::STATE_INACTIVE;
+            $sale->fe_request_nulled = [
+                "status" => "pending"
+            ];
+            $sale->save();
+            $response = true;
+            $status = 200;
         }
 
         return response([

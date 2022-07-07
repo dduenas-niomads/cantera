@@ -341,8 +341,8 @@ active
 	}
 
 	function lastStep() {
-		var clientId = document.getElementById('input-client_name_id').value;
-		if (clientId == "") {
+		var clientName = document.getElementById('input-client_name').value;
+		if (clientName == "") {
 			alert("Antes de continuar, ingrese un cliente.")
 			return;
 		} else {

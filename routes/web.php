@@ -119,6 +119,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/api/sales/delete/{saleId}', 'App\Http\Controllers\SaleController@apiDelete');
 	Route::post('/api/sales', 'App\Http\Controllers\SaleController@apiStore');
 	Route::get('/api/sales-by-reservation-id/{reservationId}', 'App\Http\Controllers\SaleController@apiSalesByReservationId');
+	Route::get('/api/sale-by-id/{saleId}', 'App\Http\Controllers\SaleController@apiSaleById');
+
 });
 
 Route::get('/commands/backup', function() {

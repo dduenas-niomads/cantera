@@ -79,7 +79,7 @@ active
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                <a class="dropdown-item" href="#">Información general</a>
+                                                <button class="dropdown-item" onclick="openSaleInfo({{ $sale->id }});">Información general</button>
                                                 @if (!is_null($sale->fe_url_pdf))
                                                     <a class="dropdown-item" href="{{ $sale->fe_url_pdf }}">Ver documento</a>
                                                 @else
@@ -125,12 +125,83 @@ active
     </div>
 </div>
 
+<div class="modal fade" id="salesModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="height: 250px; overflow-y: auto;">
+                <table class="table table-sm table-striped table-responsive" style="width: 100%;">
+                    <thead class="thead-dark">
+                        <th>Información de venta</th>
+                        <th>Productos vendidos</th>
+                    </thead>
+                    <tbody id="tbodySalesModal"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">{{ __('VOLVER') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('js')
 <script src="{{ asset('argon') }}/js/jquery.dataTables.min.js"></script>
 <script src="{{ asset('argon') }}/js/dataTables.bootstrap4.min.js"></script>
 <script>
+    function openSaleInfo(saleId) {
+        $('#salesModal').modal();       
+        $.ajax({
+            url: "/api/sale-by-id/" + saleId,
+            type: 'GET',
+            success: function(result) {
+                printReservationSales(result.result);
+            },
+            error: function(result, status) {
+                alert(result.responseJSON.message);
+            }
+        });
+    }
+    function printReservationSales(sales_ = []) {
+        var tbodySalesModal = document.getElementById('tbodySalesModal');
+        if (tbodySalesModal) {
+            tbodySalesModal.innerHTML = "";
+			sales_.forEach(item => {
+                ulProducts = '';
+                items_ = item.items;
+                count_ = 1;
+                items_.forEach(element => {
+                    ulProducts += '<ul class="simple_ul"><li><b>N°: </b>' + count_ + '</li>' +
+                        '<li><b>Código: </b>' + element.code + '</li>' +
+                        '<li><b>Nombre: </b>' + element.name + '</li>' +
+                        '<li><b>Cantidad: </b>' + element.quantity + '</li>' +
+                        '<li><b>Precio: </b>' + element.price + '</li></ul><br>';
+                    count_++;
+                });
+                url_ = "";
+                if (item.fe_url_pdf) {
+                    url_ = '<a target="_blank" href="'+ item.fe_url_pdf +'">Abrir documento</a>';
+                }
+                var statusName = "Ok";
+                if (parseInt(item.flag_active) == 0) {
+                    statusName = "Anulado";
+                }
+                codString = item.correlative.toString();
+                ulDocument = '<ul class="simple_ul"><li><b>Ruc: </b>' + item.document.document_number + '</li>' +
+                    '<li><b>Doc: </b>' + item.serie + '-' + codString.padStart(6, "0") + '</li>' +
+                    '<li><b>Tipo: </b>' + item.type_document + '</li>' +
+                    '<li><b>Total: </b>S/ ' + (parseFloat(item.total_amount)).toFixed(2) + '</li>' +
+                    '<li><b>Fecha: </b>' + item.created_at + '</li>' +
+                    '<li><b>Estado: </b>' + statusName + '</li>' +
+                    '<li><b>' + url_ + '</b></li></ul>';
+				b = document.createElement("TR");
+				b.innerHTML += '<td>' + ulDocument + '</td>' +
+					'<td>' + ulProducts + '</td>'; 
+                tbodySalesModal.appendChild(b);
+			});
+        }
+    }
     function feResend(saleId) {
         $('#feResendModal').modal();
         $.get("/api/sales/fe-resend/" + saleId, function(data, status) {

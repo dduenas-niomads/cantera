@@ -125,6 +125,7 @@ class SaleController extends Controller
                 ->orderBy(Reservation::TABLE_NAME . '.id', 'DESC')
                 ->first();
             if (!is_null($reservation)) {
+                $reservation->payment = $this->activeSalesAmount($reservation);
                 // users
                 $unitTime = ($reservation->reservation_time + $reservation->additional_time)/Reservation::DEFAULT_TIME; 
                 $unitCost = $unitTime*$reservation->price_pr_hour;
@@ -154,6 +155,38 @@ class SaleController extends Controller
         $gateways = Gateway::whereNull(Gateway::TABLE_NAME . '.deleted_at')->get();
         # return
         return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users', 'gateways'));
+    }
+
+    public function deleteSalesAmount($reservation = null)
+    {
+        $deletedSalesAmount = 0;
+        if (!is_null($reservation)) {
+            $deletedSales = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
+                ->whereNotNull(Sale::TABLE_NAME . '.fe_request_nulled')
+                ->where(Sale::TABLE_NAME . '.reservation_id', $reservation->id)
+                ->where(Sale::TABLE_NAME . '.flag_active', Sale::STATE_INACTIVE)
+                ->get();
+            $deletedSalesAmount = $deletedSales->sum('total_amount');
+        }
+
+        return $deletedSalesAmount;
+    }
+
+    public function activeSalesAmount($reservation = null)
+    {
+        $activeSalesAmount = 0;
+        if (!is_null($reservation)) {
+            $activeSales = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
+                ->whereNull(Sale::TABLE_NAME . '.fe_request_nulled')
+                ->where(Sale::TABLE_NAME . '.reservation_id', $reservation->id)
+                ->where(Sale::TABLE_NAME . '.flag_active', Sale::STATE_ACTIVE)
+                ->get();
+            $activeSalesAmount = $activeSales->sum('total_amount');
+            $reservation->payment = $activeSalesAmount;
+            $reservation->save();
+        }
+
+        return $activeSalesAmount;
     }
 
     public function edit($saleId, Request $request)
@@ -464,6 +497,32 @@ class SaleController extends Controller
         ], $status);
     }
 
+    public function apiSaleById($saleId = null)
+    {
+        $message = "No se pudo cargar la información de la venta. Inténtelo nuevamente.";
+        $status = 400;
+        $result = null;
+
+        $list = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
+            ->where(Sale::TABLE_NAME . '.id', $saleId)
+            ->with('document')
+            ->get();
+
+        if (count($list) > 0) {
+            $result = $list;
+            $status = 200;
+            $message = "Venta cargada correctamente.";
+        } else {
+            $status = 404;
+            $message = "Esta venta no existe.";
+        }
+
+        return response([
+            "message" => $message,
+            "result" => $result
+        ], $status);
+    }
+
     public static function getTotalSalesByPeriod($period, $canchaId = null)
     {
         $sales = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
@@ -644,6 +703,12 @@ class SaleController extends Controller
                 "status" => "pending"
             ];
             $sale->save();
+            if (!is_null($sale->reservation_id)) {
+                $reservation = Reservation::find($sale->reservation_id);
+                if (!is_null($reservation)) {
+                    $this->activeSalesAmount($reservation);
+                }
+            }
             $response = true;
             $status = 200;
         }

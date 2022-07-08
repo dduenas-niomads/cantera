@@ -617,12 +617,17 @@ active
                 if (item.fe_url_pdf) {
                     url_ = '<a target="_blank" href="'+ item.fe_url_pdf +'">Abrir documento</a>';
                 }
+                var statusName = "Ok";
+                if (parseInt(item.flag_active) == 0) {
+                    statusName = "Anulado";
+                }
                 codString = item.correlative.toString();
                 ulDocument = '<ul class="simple_ul"><li><b>Ruc: </b>' + item.document.document_number + '</li>' +
                     '<li><b>Doc: </b>' + item.serie + '-' + codString.padStart(6, "0") + '</li>' +
                     '<li><b>Tipo: </b>' + item.type_document + '</li>' +
                     '<li><b>Total: </b>S/ ' + (parseFloat(item.total_amount)).toFixed(2) + '</li>' +
                     '<li><b>Fecha: </b>' + item.created_at + '</li>' +
+                    '<li><b>Estado: </b>' + statusName + '</li>' +
                     '<li><b>' + url_ + '</b></li></ul>';
 				b = document.createElement("TR");
 				b.innerHTML += '<td>' + ulDocument + '</td>' +

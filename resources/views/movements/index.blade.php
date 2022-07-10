@@ -50,9 +50,10 @@ active
                         <table class="myTable align-items-center table-bordered table-hover table-sm" id="saleListDataTable">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col" class="thTaxationLeft">Fecha</th>
+                                    <th scope="col" class="thTaxationLeft">ID</th>
+                                    <th scope="col" class="thTaxationMiddle">Fecha</th>
                                     <th scope="col" class="thTaxationMiddle">Tipo</th>
-                                    <th scope="col" class="thTaxationMiddle">Documento</th>
+                                    <th scope="col" class="thTaxationMiddle">Referencia</th>
                                     <th scope="col" class="thTaxationMiddle">Total movimiento</th>
                                     <th scope="col" class="thTaxationMiddle">Productos</th>
                                     <th scope="col" class="thTaxationRight"></th>
@@ -61,6 +62,7 @@ active
                             <tbody>
                                 @foreach ($list as $object)
                                 <tr>
+                                    <td>{{ str_pad($object->id, 6, "0", STR_PAD_LEFT) }}</td>
                                     <td>{{ $object->created_at }}</td>
                                     <td>{{ $object->type_movement_name }}</td>
                                     <td>{{ $object->ref_document }}</td>

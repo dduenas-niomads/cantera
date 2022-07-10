@@ -18,7 +18,7 @@
                     </a>
                 </li>
                 <li class="nav-item @yield('nav-reports-fe')">
-                    <a href="#" class="nav-link">
+                    <a href="/reports/fe" class="nav-link">
                         <span class="sidenav-normal"> Facturación electrónica </span>
                     </a>
                 </li>

@@ -73,6 +73,46 @@ class SaleController extends Controller
         return view(Sale::MODULE_NAME . '.report', compact('saleList', 'cancha_name', 'taxes', 'selectedDate'));
     }
 
+    public function showFeReport(Request $request)
+    {
+        $params = $request->all();
+        $selectedDateStart = Carbon::now()->startOfMonth()->toDateString();
+        $selectedDateEnd = Carbon::now()->endOfMonth()->toDateString();
+        $selectedDocumentId = 0;
+        $selectedFlagActive = null;
+        $selectedTypeDocument = null;
+        $taxes = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
+        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
+        $user = Auth()->user();
+        if ($user->rols_id != 1) {
+            $cancha_name = "Cancha " . $user->cancha_id;
+            $taxes = $taxes->where(Tax::TABLE_NAME . '.cancha_id', $user->cancha_id);
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.cancha_id', $user->cancha_id);
+        }
+        if (isset($params['date_start']) && $params['date_start'] !== '0') {
+            $selectedDateStart = $params['date_start'];
+        }
+        if (isset($params['date_end']) && $params['date_end'] !== '0') {
+            $selectedDateEnd = $params['date_end'];
+        }
+        if (isset($params['document_id']) && (int)$params['document_id'] !== 0) {
+            $selectedDocumentId = (int)$params['document_id'];
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.document_id', $selectedDocumentId);
+        }
+        if (isset($params['type_document']) && $params['type_document'] !== "") {
+            $selectedTypeDocument = $params['type_document'];
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.type_document', $selectedTypeDocument);
+        }
+        if (isset($params['flag_active']) && $params['flag_active'] !== "") {
+            $selectedFlagActive = $params['flag_active'];
+            $saleList = $saleList->where(Sale::TABLE_NAME . '.flag_active', $selectedFlagActive);
+        }
+        $saleList = $saleList->whereBetween(Sale::TABLE_NAME . '.created_at', [$selectedDateStart . " 00:00:00", $selectedDateEnd . " 23:59:59"]);
+        $saleList = $saleList->with('client')->with('document')->get();
+        $taxes = $taxes->get();
+        return view(Sale::MODULE_NAME . '.fe-report', compact('saleList', 'taxes', 'selectedDateEnd', 'selectedDateStart', 'selectedDocumentId', 'selectedTypeDocument', 'selectedFlagActive'));
+    }
+
     public function saleAdjust(Request $request)
     {
         $params = $request->all();

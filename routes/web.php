@@ -67,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// reports
 	Route::get('reports/clients', ['as' => 'clients.showReport', 'uses' => 'App\Http\Controllers\ClientController@showReport']);
 	Route::get('reports/sales', ['as' => 'sales.showReport', 'uses' => 'App\Http\Controllers\SaleController@showReport']);
+	Route::get('reports/fe', ['as' => 'sales.showFeReport', 'uses' => 'App\Http\Controllers\SaleController@showFeReport']);
 	Route::get('reports/cars', ['as' => 'cars.showReport', 'uses' => 'App\Http\Controllers\CarController@showReport']);
 	Route::get('reports/cars-history/{number?}', ['as' => 'cars.showHistory', 'uses' => 'App\Http\Controllers\CarController@showHistory']);
 	Route::get('reports/salers', ['as' => 'users.showReport', 'uses' => 'App\Http\Controllers\UserController@showReport']);

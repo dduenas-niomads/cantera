@@ -86,27 +86,40 @@ active
                                     <th scope="col" class="thTaxationMiddle">Correlativo</th>
                                     <th scope="col" class="thTaxationMiddle">Cliente</th>
                                     <th scope="col" class="thTaxationMiddle">Monto total</th>
-                                    <th scope="col" class="thTaxationMiddle">Comentario</th>
+                                    <th scope="col" class="thTaxationMiddle">Canal de pago</th>
+                                    <th scope="col" class="thTaxationMiddle">Estado</th>
                                     <th scope="col" class="thTaxationRight">Fecha comprobante</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                     $totalAmount = 0;
+                                    $gateways = [];
                                 @endphp
-                                @foreach ($saleList as $key => $value)
+                                @foreach ($saleList as $key => $sale)
                                     @php
-                                        $totalAmount = $totalAmount + $value->total_amount;
+                                        if ($sale->flag_active === 1 && !is_null($sale->gateway)) {
+                                            $totalAmount = $totalAmount + $sale->total_amount;
+                                            if (!isset($gateways[$sale->gateway->id])) {
+                                                $gateways[$sale->gateway->id] = [
+                                                    "name" => $sale->gateway->name,
+                                                    "value" => 0
+                                                ];
+                                            }
+                                            $gateways[$sale->gateway->id]['value'] = $gateways[$sale->gateway->id]['value'] + $sale->total_amount;
+                                        }
                                     @endphp
                                     <tr>
-                                        <td>{{ $value->type_document }}</td>
-                                        <td>{{ $value->document->document_number }}</td>
-                                        <td>{{ $value->serie }}</td>
-                                        <td>{{ $value->correlative }}</td>
-                                        <td>{{ $value->client->name }}</td>
-                                        <td>{{ number_format($value->total_amount, 2) }}</td>
-                                        <td>{{ $value->commentary }}</td>
-                                        <td>{{ $value->created_at }}</td>
+                                        <td>{{ $sale->type_document }}</td>
+                                        <td>{{ $sale->document->document_number }}</td>
+                                        <td>{{ $sale->serie }}</td>
+                                        <td>{{ $sale->correlative }}</td>
+                                        <td>{{ $sale->client->name }}</td>
+                                        <td>{{ number_format($sale->total_amount, 2) }}</td>
+                                        <td>{{ !is_null($sale->gateway) ? $sale->gateway->name : "" }}</td>
+                                        @include('layouts.utils.sunat_status')
+                                        <td>{{ $sale->sunatStatus }}</td>
+                                        <td>{{ $sale->created_at }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -114,6 +127,12 @@ active
                                 <tr>
                                     <th colspan="8">
                                         <h3>Monto total emitido en {{ $selectedDate }}: S/ {{ number_format($totalAmount, 2) }}</h3>
+                                        <label for="">Desglose por canales de pago</label>
+                                        <ul>
+                                            @foreach ($gateways as $gatewayInfo)
+                                                <li><b> {{ $gatewayInfo['name'] }} : </b> S/ {{ number_format($gatewayInfo['value'], 2) }} </li>
+                                            @endforeach
+                                        </ul>
                                     </th>
                                 </tr>
                             </tfoot>

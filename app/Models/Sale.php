@@ -18,6 +18,7 @@ class Sale extends Model
     const SALE_TYPE_INVOICE_0 = '00';
     const SALE_TYPE_INVOICE_B = '03';
     const SALE_TYPE_INVOICE_F = '01';
+    const DEFAULT_GATEWAY = 1;
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +28,7 @@ class Sale extends Model
         //Table Rows
         'id',
         
+        'gateway_id',
         'cancha_id',
         'reservation_id',
         'client_id',
@@ -61,8 +63,7 @@ class Sale extends Model
         "fe_response" => "array",
         "fe_request_nulled" => "array",
         "fe_response_nulled" => "array",
-
-    'created_at' => 'datetime:d/m/Y h:m:s',
+        'created_at' => 'datetime:d/m/Y h:m:s',
     ];
     public function getFillable() {
         # code...
@@ -77,6 +78,11 @@ class Sale extends Model
     public function document()
     {
         return $this->belongsTo('App\Models\Tax', 'document_id');
+    }
+
+    public function gateway()
+    {
+        return $this->belongsTo('App\Models\Gateway', 'gateway_id');
     }
 
     /**

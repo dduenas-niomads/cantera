@@ -15,8 +15,15 @@
             <label for="">Total por cobrar:</label>
             <h1 id="totalAmount">S/ 0.00</h1>
             <br>
-            <label for="">Comentarios adicionales</label>
-            <input type="text" class="form-control" id="input-commentary" placeholder="Agrega los tipos de pago o detalles adicionales de la venta">
+            <label for="">Canal de pagos</label>
+            <select id="gateway_id" class="form-control">
+                @foreach ($gateways as $gatewayInfo)
+                    <option value="{{ $gatewayInfo->id }}">{{ $gatewayInfo->name }}</option>
+                @endforeach
+            </select>
+            <br>
+            <label for="">Detalle o comentarios adicionales</label>
+            <input type="text" class="form-control" id="input-commentary" placeholder="Agrega comentarios sobre esta venta. (Opcional)">
             <br>
         </div>
     </div>

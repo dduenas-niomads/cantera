@@ -85,12 +85,12 @@ active
                                     <label for="">Estado</label>
                                     <select name="flag_active" class="form-control">
                                         <option value="">TODOS</option>
-                                        @if ((int)$selectedFlagActive === 1)
+                                        @if ($selectedFlagActive === "1")
                                             <option selected value="1">OK</option>
                                         @else
                                             <option value="1">OK</option>
                                         @endif
-                                        @if ((int)$selectedFlagActive === 0)
+                                        @if ($selectedFlagActive === "0")
                                             <option selected value="0">ANULADO</option>
                                         @else
                                             <option value="0">ANULADO</option>
@@ -210,8 +210,8 @@ active
             "dom": "Bfrtip",
             "buttons": [
                 {
-                    "extend": "print",
-                    "text": "Imprimir datos",
+                    "extend": "excel",
+                    "text": "Exportar datos a excel",
                     "class": "btn btn btn-success",
                     "footer": true
                 }

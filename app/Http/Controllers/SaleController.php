@@ -567,6 +567,7 @@ class SaleController extends Controller
     public static function getTotalSalesByPeriod($period, $canchaId = null)
     {
         $sales = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')
+            ->where(Sale::TABLE_NAME . '.pos_companies_id', Auth()->user()->pos_companies_id)
             ->where(Sale::TABLE_NAME . '.period', $period);
         if (!is_null($canchaId)) {
             # buscar por cancha id

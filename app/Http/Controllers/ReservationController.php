@@ -558,12 +558,15 @@ class ReservationController extends Controller
 
     public static function getTotalReservationsByPeriod($period, $canchaId = null)
     {
-        $reservations = Reservation::whereNull(Reservation::TABLE_NAME . '.deleted_at')
-            ->where(Reservation::TABLE_NAME . '.reservation_date', 'like' , '%' . $period . '%');
-        if (!is_null($canchaId)) {
-            # buscar por cancha id
+        $reservations = [];
+        if (Auth()->user()->company->type_business === 1) {
+            $reservations = Reservation::whereNull(Reservation::TABLE_NAME . '.deleted_at')
+                ->where(Reservation::TABLE_NAME . '.reservation_date', 'like' , '%' . $period . '%');
+            if (!is_null($canchaId)) {
+                # buscar por cancha id
+            }
+            $reservations = $reservations->get();
         }
-        $reservations = $reservations->get();
 
         return count($reservations);
     }

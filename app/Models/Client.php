@@ -42,6 +42,7 @@ class Client extends Model
         'estado_contribuyente','condicion_contribuyente',
         'rl_name','rl_type_document','rl_document_number',
         'rl_position',
+        'pos_companies_id',
         //Audit 
         'created_by','updated_by','deleted_by',
         'flag_active','created_at','updated_at','deleted_at',

@@ -6,8 +6,12 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand" href="{{ route('home') }}">
-            <img src="{{ asset('argon') }}/img/brand/logo.jpeg" 
-                class="navbar-brand-img" style="max-height: 50px;" alt="...">
+            @if (!is_null(Auth::user()->company->url_image))
+            <img src="{{ Auth::user()->company->url_image }}" 
+                class="navbar-brand-img" style="max-height: 50px;">
+            @else
+            <h1>{{ Auth::user()->company->name }}</h1>
+            @endif
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">

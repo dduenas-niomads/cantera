@@ -27,9 +27,11 @@ class TaxController extends Controller
     public function apiIndex(Request $request)
     {
         $params = $request->all();
+        $user = Auth()->user();
         // car list
         $status = 1;
-        $list = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
+        $list = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')
+            ->where(Tax::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
 
         if (isset($params['search']) && isset($params['search']['value'])) {
             $key = $params['search']['value'];
@@ -84,9 +86,10 @@ class TaxController extends Controller
     public function store(Request $request)
     {
         $params = $request->all();
+        $user = Auth()->user();
         # buscar RUC por código
         if (isset($params['document_number'])) {
-            $taxByCode = self::findTaxByCode(strtoupper($params['document_number']));
+            $taxByCode = self::findTaxByCode(strtoupper($params['document_number']), $user->pos_companies_id);
             if (!is_null($taxByCode)) {
                 $message = "El RUC no se pudo registar. El número de documento ya existe.";
                 $messageClass = "danger";
@@ -95,6 +98,7 @@ class TaxController extends Controller
             }
         }
         # crear RUC
+        $params['pos_companies_id'] = $user->pos_companies_id;
         $tax = Tax::create($params);
         $message = "El RUC se creó correctamente.";
         $messageClass = "success";
@@ -217,9 +221,12 @@ class TaxController extends Controller
         self::updateMasterInfo($car);
     }
 
-    private static function findTaxByCode($code) {
-        $tax = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')
-            ->where(Tax::TABLE_NAME . '.flag_active', Tax::STATE_ACTIVE)
+    private static function findTaxByCode($code, $pos_companies_id = null) {
+        $tax = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
+        if (!is_null($pos_companies_id)) {
+            $tax = $tax->where(Tax::TABLE_NAME . '.pos_companies_id', $pos_companies_id);
+        }
+        $tax = $tax->where(Tax::TABLE_NAME . '.flag_active', Tax::STATE_ACTIVE)
             ->where(Tax::TABLE_NAME . '.document_number', $code)
             ->first();
         return $tax;

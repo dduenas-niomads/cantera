@@ -114,6 +114,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::delete('/api/reservations/destroy/{reservationId}', 'App\Http\Controllers\ReservationController@apiDestroy');
 	Route::get('/api/reservations-destroy/{reservationId}', 'App\Http\Controllers\ReservationController@apiDestroy')->middleware('web');
 
+	Route::get('/movements/create/excel-upload', 'App\Http\Controllers\MovementController@createExcelUpload')->name('movements.createExcel');
+	Route::post('/movements/create/excel-upload', 'App\Http\Controllers\MovementController@postCreateExcelUpload')->name('movements.postCreateExcel');
+
 	Route::post('/api/movements', 'App\Http\Controllers\MovementController@apiStore');
 
 	Route::get('/api/sales/fe-resend/{saleId}', 'App\Http\Controllers\SaleController@apiFeResend');

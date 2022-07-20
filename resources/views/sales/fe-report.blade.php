@@ -79,6 +79,11 @@ active
                                         @else
                                             <option value="03">BOLETA</option>
                                         @endif
+                                        @if ($selectedTypeDocument === "01")
+                                            <option selected value="01">FACTURA</option>
+                                        @else
+                                            <option value="01">FACTURA</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-md-2 mt-1">

@@ -59,7 +59,7 @@ final class Versions
   'league/commonmark' => '1.6.2@7d70d2f19c84bcc16275ea47edabee24747352eb',
   'league/flysystem' => '1.1.3@9be3b16c877d477357c015cec057548cf9b2a14a',
   'league/mime-type-detection' => '1.7.0@3b9dff8aaf7323590c1d2e443db701eb1f9aa0d3',
-  'maatwebsite/excel' => '3.1.31@cbe6370af70f93bd017f77ef92d32bd492a47fcb',
+  'maatwebsite/excel' => '3.1.40@8a54972e3d616c74687c3cbff15765555761885c',
   'maennchen/zipstream-php' => '2.1.0@c4c5803cc1f93df3d2448478ef79394a5981cc58',
   'markbaker/complex' => '2.0.3@6f724d7e04606fd8adaa4e3bb381c3e9db09c946',
   'markbaker/matrix' => '2.1.3@174395a901b5ba0925f1d790fa91bab531074b61',
@@ -156,7 +156,7 @@ final class Versions
   'sebastian/type' => '2.3.1@81cd61ab7bbf2de744aba0ea61fae32f721df3d2',
   'sebastian/version' => '3.0.2@c6c1022351a901512170118436c764e473f6de8c',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
-  'laravel/laravel' => 'dev-master@ba927e0dffad5072d771a017bc9b366cba2c9953',
+  'laravel/laravel' => 'dev-master@16fc3f8f39f4e645357ea878fbdbe4439b3c04a8',
 );
 
     private function __construct()

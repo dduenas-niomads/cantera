@@ -25,62 +25,62 @@ active
 	<div class="row">
 		<div class="col">
 			<div class="card shadow">
-				<br>
-                <div class="col-12">
-					@if (isset($message) && isset($messageClass))
-						<div class="alert alert-{{ $messageClass }} alert-dismissible fade show" role="alert">
-							<strong>Notificación:</strong> {{ $message }}
-							<button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-					@endif
-                </div>
-				<div class="col-12">
-					<form method="post" action="{{ route('movements.store') }}" 
-						id="storeForm" autocomplete="off" enctype="multipart/form-data">
-						@csrf
-						@method('post')
-						<div id="stepperDiv" class="bs-stepper">
-							<div class="bs-stepper-header">
-								<div class="step" data-target="#test-nl-1">
-									<button type="button" class="btn step-trigger">
-										<span class="bs-stepper-circle">1</span>
-										<span class="bs-stepper-label">Datos principales</span>
-									</button>
-								</div>
-								<div class="line"></div>
-								<div class="step" data-target="#test-nl-2">
-									<div class="btn step-trigger">
-										<span class="bs-stepper-circle">2</span>
-										<span class="bs-stepper-label">Items</span>
+				<div class="card-header">
+					<h3 class="mb-0">Nuevo movimiento de mercadería manual</h3>
+				</div>
+				<div class="card-body">
+					<div class="col-12">
+						@if (isset($message) && isset($messageClass))
+							<div class="alert alert-{{ $messageClass }} alert-dismissible fade show" role="alert">
+								<strong>Notificación:</strong> {{ $message }}
+								<button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+						@endif
+					</div>
+					<div class="col-12">
+						<form method="post" action="{{ route('movements.store') }}" 
+							id="storeForm" autocomplete="off" enctype="multipart/form-data">
+							@csrf
+							@method('post')
+							<div id="stepperDiv" class="bs-stepper">
+								<div class="bs-stepper-header">
+									<div class="step" data-target="#test-nl-1">
+										<button type="button" class="btn step-trigger">
+											<span class="bs-stepper-circle">1</span>
+											<span class="bs-stepper-label">Datos principales</span>
+										</button>
+									</div>
+									<div class="line"></div>
+									<div class="step" data-target="#test-nl-2">
+										<div class="btn step-trigger">
+											<span class="bs-stepper-circle">2</span>
+											<span class="bs-stepper-label">Items</span>
+										</div>
+									</div>
+									<div class="line"></div>
+									<div class="step" data-target="#test-nl-3">
+										<button type="button" class="btn step-trigger">
+											<span class="bs-stepper-circle">3</span>
+											<span class="bs-stepper-label">Resumen</span>
+										</button>
 									</div>
 								</div>
-								<div class="line"></div>
-								<div class="step" data-target="#test-nl-3">
-									<button type="button" class="btn step-trigger">
-										<span class="bs-stepper-circle">3</span>
-										<span class="bs-stepper-label">Resumen</span>
-									</button>
+								<div class="bs-stepper-content">
+									<div id="test-nl-1" class="content">
+										@include('movements.partials.form_create_info')
+									</div>
+									<div id="test-nl-2" class="content">
+										@include('movements.partials.form_create_items')
+									</div>
+									<div id="test-nl-3" class="content">
+										@include('movements.partials.form_create_validation')
+									</div>
 								</div>
 							</div>
-							<div class="bs-stepper-content">
-								<div id="test-nl-1" class="content">
-									@include('movements.partials.form_create_info')
-								</div>
-								<div id="test-nl-2" class="content">
-									@include('movements.partials.form_create_items')
-								</div>
-								<div id="test-nl-3" class="content">
-									@include('movements.partials.form_create_validation')
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="card-footer py-4">
-					<nav class="d-flex justify-content-end" aria-label="...">
-					</nav>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -226,6 +226,9 @@ active
 		}
 	}
 	var positionCount = 0;
+	function goToExcelUpload() {
+        window.location.replace("/movements/create/excel-upload");
+	}
 	function updateExpensesValues(element) {
 		// calcular utilidad facturable
 		var baseAmount = 0;
@@ -345,6 +348,7 @@ active
 			info: {
 				type_document: document.getElementById('input-type_movement').value,
 				date_start: document.getElementById('input-date_start').value,
+				description: document.getElementById('input-description').value,
 			},
 			items: items_
 		};

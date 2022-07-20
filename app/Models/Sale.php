@@ -42,6 +42,7 @@ class Sale extends Model
         'correlative',
         'total_amount',
         'taxes',
+        'pos_companies_id',
         // fe
         'fe_request','fe_response','fe_status_code','fe_url_pdf',
         'fe_request_nulled','fe_response_nulled','fe_status_code_nulled',

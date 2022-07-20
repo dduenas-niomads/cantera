@@ -80,13 +80,22 @@ active
                                         </span>
                                     @endif
                                 </div>
-                                <div class="form-group{{ $errors->has('cancha_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-cancha_id">{{ __('Cancha') }}</label>
-                                    <select name="cancha_id" class="form-control ">
-                                        <option value="1">CANCHA 1</option>
-                                        <option value="2">CANCHA 2</option>
-                                    </select>
-                                </div>
+								@if (Auth()->user()->company->type_business === 1)
+                                    <div class="form-group{{ $errors->has('cancha_id') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-cancha_id">{{ __('Cancha') }}</label>
+                                        <select name="cancha_id" class="form-control ">
+                                            <option value="1">CANCHA 1</option>
+                                            <option value="2">CANCHA 2</option>
+                                        </select>
+                                    </div>
+								@else
+                                    <div class="form-group{{ $errors->has('cancha_id') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-cancha_id">{{ __('Local') }}</label>
+                                        <select name="cancha_id" class="form-control ">
+                                            <option value="3">{{ Auth()->user()->company->name }}</option>
+                                        </select>
+                                    </div>
+                                @endif
                                 <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-email">{{ __('Correo electrónico') }}</label>
                                     <input type="email" name="email" id="input-email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Ingrese correo electrónico') }}" value="{{ old('email') }}">

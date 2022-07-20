@@ -33,7 +33,7 @@ class SaleController extends Controller
     public function index(Request $request)
     {
         $user = Auth()->user();
-        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
+        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')->where(Sale::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
         if ($user->rols_id !== 1) {
             $saleList = $saleList->where(Sale::TABLE_NAME . '.cancha_id', $user->cancha_id);
         }
@@ -48,11 +48,11 @@ class SaleController extends Controller
     {
         $params = $request->all();
         // dd($params);
-        $cancha_name = "Todas las canchas";
-        $selectedDate = date("Y-m-d");
-        $taxes = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
-        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
         $user = Auth()->user();
+        $cancha_name = "Todas las " . $user->company->unit_name;
+        $selectedDate = date("Y-m-d");
+        $taxes = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')->where(Tax::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
+        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')->where(Sale::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
         if ($user->rols_id != 1) {
             $cancha_name = "Cancha " . $user->cancha_id;
             $taxes = $taxes->where(Tax::TABLE_NAME . '.cancha_id', $user->cancha_id);
@@ -76,16 +76,15 @@ class SaleController extends Controller
     public function showFeReport(Request $request)
     {
         $params = $request->all();
+        $user = Auth()->user();
         $selectedDateStart = Carbon::now()->startOfMonth()->toDateString();
         $selectedDateEnd = Carbon::now()->endOfMonth()->toDateString();
         $selectedDocumentId = 0;
         $selectedFlagActive = null;
         $selectedTypeDocument = null;
-        $taxes = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at');
-        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at');
-        $user = Auth()->user();
+        $taxes = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')->where(Tax::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
+        $saleList = Sale::whereNull(Sale::TABLE_NAME . '.deleted_at')->where(Sale::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
         if ($user->rols_id != 1) {
-            $cancha_name = "Cancha " . $user->cancha_id;
             $taxes = $taxes->where(Tax::TABLE_NAME . '.cancha_id', $user->cancha_id);
             $saleList = $saleList->where(Sale::TABLE_NAME . '.cancha_id', $user->cancha_id);
         }
@@ -183,18 +182,19 @@ class SaleController extends Controller
             ->where(Tax::TABLE_NAME . '.cancha_id', Auth()->user()->cancha_id);
         if (!is_null($reservation)) {
             $rucs = $rucs->where('type', 1);
-        } else {
-            $rucs = $rucs->where('type', 2);
         }
         $rucs = $rucs->get();
-            // ->withCount('amountperiod')
-        foreach ($rucs as $key => $value) {
-            $value->amount_pr_period = TaxController::getAmount(date("Ym"), $value->id, Sale::SALE_TYPE_INVOICE_B);
+        if (count($rucs) > 0) {
+            foreach ($rucs as $key => $value) {
+                $value->amount_pr_period = TaxController::getAmount(date("Ym"), $value->id, Sale::SALE_TYPE_INVOICE_B);
+            }
+            # GATEWAYS
+            $gateways = Gateway::whereNull(Gateway::TABLE_NAME . '.deleted_at')->get();
+            # return
+            return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users', 'gateways'));
+        } else {
+            return view(Sale::MODULE_NAME . '.no_rucs_available');
         }
-        # GATEWAYS
-        $gateways = Gateway::whereNull(Gateway::TABLE_NAME . '.deleted_at')->get();
-        # return
-        return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users', 'gateways'));
     }
 
     public function deleteSalesAmount($reservation = null)
@@ -456,6 +456,7 @@ class SaleController extends Controller
                     $canchaId = $user->cancha_id;
                 }
                 $sale = new Sale();
+                $sale->pos_companies_id = $user->pos_companies_id;
                 $sale->cancha_id = $canchaId;
                 $sale->reservation_id = !is_null($reservation) ? $reservation->id : null;
                 $sale->client_id = $client->id;

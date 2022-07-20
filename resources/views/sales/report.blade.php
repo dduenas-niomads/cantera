@@ -43,10 +43,10 @@ active
                         </div>
                     @endif
                     <div class="row">
-                        <div class="col-md-4">
-                            <h3 >Cierre de ventas por día en: {{ $cancha_name }}</h3>
+                        <div class="col-md-3">
+                            <h3 >{{ $cancha_name }}</h3>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <form action="{{ route('sales.showReport') }}" method="get">
                                 <div class="row">
                                     <div class="col-md-3 mt-1">
@@ -65,6 +65,7 @@ active
                                             <option value="">TODOS LOS DOCUMENTOS</option>
                                             <option value="00">TICKET INTERNO</option>
                                             <option value="03">BOLETA</option>
+                                            <option value="01">FACTURA</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3 mt-1">

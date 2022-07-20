@@ -34,6 +34,7 @@ class Tax extends Model
         //Table Rows
         'id', 'document_number', 'name', 'description', 
         'top', 'type', 'emisor_json', 'cancha_id',
+        'pos_companies_id',
         //Audit 
         'created_by', 'updated_by', 'deleted_by',
         'flag_active', 'created_at', 'updated_at', 'deleted_at'

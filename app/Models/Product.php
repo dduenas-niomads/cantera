@@ -22,6 +22,11 @@ class Product extends Model
         '.price_compra', '.price_sale', '.stock', '.type_product',
         '.flag_active',
     ];
+    const ARRAY_ORDER_BOTICA = [
+        '.code', '.family', '.subfamily', '.name', '.generic','.lab',
+        '.price_compra', '.price_sale','.type_product',
+        '.flag_active',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -32,6 +37,10 @@ class Product extends Model
         'id', 'code', 'brand', 'brand_id', 'category', 'category_id',
         'name', 'description', 'price_compra', 'price_sale', 'type_product',
         'stock', 'minimun_stock',
+        'pos_companies_id',
+        // new pos
+        'family','family_id', 'subfamily', 'subfamily_id',
+        'generic', 'generic_id', 'lab', 'lab_id',
         //Audit 
         'created_by', 'updated_by', 'deleted_by',
         'flag_active', 'created_at', 'updated_at', 'deleted_at'

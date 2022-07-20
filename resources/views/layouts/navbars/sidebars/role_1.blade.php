@@ -35,11 +35,13 @@
             </ul>
         </div>
     </li>
+    @if (Auth()->user()->company->type_business  === 1)
     <li class="nav-item @yield('nav-reservations')">
         <a class="nav-link" href="/reservations">
             <i class="ni ni-calendar-grid-58 text-danger"></i> {{ __('Reservas') }}
         </a>
     </li>
+    @endif
     <li class="nav-item @yield('nav-sales')">
         <a class="nav-link" href="{{ route('sales.index') }}">
             <i class="ni ni-money-coins text-danger"></i> {{ __('Ventas') }}

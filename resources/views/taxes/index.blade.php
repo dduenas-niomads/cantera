@@ -68,7 +68,7 @@ active
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="">
                         <table class="myTable align-items-center table-bordered table-hover table-sm" id="carListDataTable">
                             <thead class="thead-dark">
                                 <tr>
@@ -109,7 +109,7 @@ active
 <script src="{{ asset('argon') }}/js/default.js"></script>
 <script>
     var table = $('#carListDataTable').DataTable({
-        "info": false,
+        "info": true,
         "scrollX": false,
         "ordering": true,
         "searching": true,
@@ -143,8 +143,19 @@ active
         "columns" : [
                 {'data':   function (data) {
                     var message = "CANCHA";
-                    if (data.type != 1) {
-                    message = "BAR";
+                    switch (parseInt(data.type)) {
+                        case 2:
+                            message = "BAR";
+                            break;
+                        case 3:
+                            message = "TIENDA FISICA";
+                            break;
+                        case 4:
+                            message = "TIENDA ONLINE";
+                            break;
+                    
+                        default:
+                            break;
                     }
                     return message;
                 }},

@@ -15,9 +15,10 @@ class Movement extends Model
     const STATE_ACTIVE = true;
     const STATE_INACTIVE = false;
 
-    const MOVEMENT_TYPE_01 = 'INGRESO MANUAL';
-    const MOVEMENT_TYPE_02 = 'SALIDA MANUAL';
-    const MOVEMENT_TYPE_02_SALE = 'SALIDA POR VENTA';
+    const MOVEMENT_TYPE_01 = 'INGRESO MERCADERIA';
+    const MOVEMENT_TYPE_02 = 'SALIDA MERCADERIA';
+    const MOVEMENT_TYPE_03 = 'RECUENTO DE MERCADERIA';
+    const MOVEMENT_TYPE_02_SALE = 'SALIDA MERCADERIA POR VENTA';
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +37,8 @@ class Movement extends Model
         'items',
         'total_amount',
         'ref_document',
+        'pos_companies_id',
+        'description',
         // Auditory
         'created_by','updated_by','deleted_by',
         'flag_active','created_at','updated_at','deleted_at',

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'cancha_id',
+        'pos_companies_id',
     ];
 
     /**
@@ -42,6 +43,12 @@ class User extends Authenticatable
     {
         // dd(true);
         return $this->belongsTo('App\Models\Role', 'rols_id');
+    }
+
+    public function company()
+    {
+        // dd(true);
+        return $this->belongsTo('App\Models\PosCompany', 'pos_companies_id');
     }
 
     /**

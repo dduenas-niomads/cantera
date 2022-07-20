@@ -18,7 +18,8 @@ class ClientController extends Controller
     public function index()
     {
         $user = Auth()->user();
-        $clientList = Client::whereNull(Client::TABLE_NAME . '.deleted_at');
+        $clientList = Client::whereNull(Client::TABLE_NAME . '.deleted_at')
+            ->where(Client::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
         // if ($user->rolls_id !== 1) {
         //     $clientList = $clientList->where(Client::TABLE_NAME . '.cancha_id', $user->cancha_id);
         // }
@@ -30,13 +31,15 @@ class ClientController extends Controller
     public function indexApi(Request $request)
     {
         $responseStatus = 200;
+        $user = Auth()->user();
         $requestedName = $request->query('name', '');
         $concatQuery = $this->generateConcatRow([Client::TABLE_NAME . '.names', 
             Client::TABLE_NAME . '.first_lastname', Client::TABLE_NAME . '.second_lastname',
             Client::TABLE_NAME . '.rz_social', Client::TABLE_NAME . '.commercial_name']);
         $list = Client::select(Client::TABLE_NAME . '.*',
                 DB::raw($concatQuery))
-            ->whereNull(Client::TABLE_NAME . '.deleted_at');
+            ->whereNull(Client::TABLE_NAME . '.deleted_at')
+            ->where(Client::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
         $list = $list->where(function($query) use ($requestedName){
             $query->where(Client::TABLE_NAME . '.names', 'LIKE', '%' . $requestedName . '%');
             $query->orWhere(Client::TABLE_NAME . '.first_lastname', 'LIKE', '%' . $requestedName . '%');

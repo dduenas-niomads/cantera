@@ -22,7 +22,10 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        $userList = User::whereNull(User::TABLE_NAME . '.deleted_at')->with('role')->get();
+        $user = Auth()->user();
+        $userList = User::whereNull(User::TABLE_NAME . '.deleted_at')
+            ->where(User::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id)
+            ->with('role')->get();
         return view('users.index', compact('userList'));
     }
 

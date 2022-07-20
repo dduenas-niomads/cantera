@@ -20,15 +20,21 @@ class ProductController extends Controller
     {
         $list = [];
         $status = 1;
-        return view(Product::MODULE_NAME . '.index', compact('list', 'status'));
+        $view = Product::MODULE_NAME . '.index';
+        if (Auth()->user()->company->type_business === 2) {
+            $view = Product::MODULE_NAME . '.index_botica';
+        }
+        return view($view, compact('list', 'status'));
     }
 
     public function apiIndex(Request $request)
     {
         $params = $request->all();
+        $user = Auth()->user();
         // car list
         $status = 200;
-        $list = Product::whereNull(Product::TABLE_NAME . '.deleted_at');
+        $list = Product::whereNull(Product::TABLE_NAME . '.deleted_at')
+            ->where(Product::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
 
         if (isset($params['name'])) {
             $params['search'] = [
@@ -50,6 +56,9 @@ class ProductController extends Controller
 
         if (isset($params['order'])) {
             $array_order = Product::ARRAY_ORDER;
+            if (Auth()->user()->company->type_business === 2) {
+                $array_order = Product::ARRAY_ORDER_BOTICA;
+            }
             $list = $list->orderBy(Product::TABLE_NAME . 
                 $array_order[$params['order'][0]['column']], 
                 $params['order'][0]['dir']);
@@ -97,6 +106,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $params = $request->all();
+        $user = Auth()->user();
         # buscar producto por código
         if (isset($params['code'])) {
             $productByCode = self::findProductByCode(strtoupper($params['code']));
@@ -108,6 +118,7 @@ class ProductController extends Controller
             }
         }
         # crear producto
+        $params['pos_companies_id'] = $user->pos_companies_id;
         $product = Product::create($params);
         $message = "El producto se creó correctamente.";
         $messageClass = "success";
@@ -130,6 +141,7 @@ class ProductController extends Controller
     public static function getTotalProducts($canchaId = null)
     {
         $products = Product::whereNull(Product::TABLE_NAME . '.deleted_at')
+            ->where(Product::TABLE_NAME . '.pos_companies_id', Auth()->user()->pos_companies_id)
             ->where(Product::TABLE_NAME . '.flag_active', Product::STATE_ACTIVE);
         if (!is_null($canchaId)) {
             # buscar por cancha id
@@ -174,6 +186,7 @@ class ProductController extends Controller
                 if (isset($params['price'])) {
                     $params['price_sale'] = $params['price'];
                 }
+                $params['pos_companies_id'] = Auth()->user()->pos_companies_id;
                 $product = Product::create($params);
             }
         }
@@ -257,8 +270,12 @@ class ProductController extends Controller
         self::updateMasterInfo($car);
     }
 
-    private static function findProductByCode($code) {
+    private static function findProductByCode($code, $posCompaniesId = null) {
+        if (is_null($posCompaniesId)) {
+            $posCompaniesId = Auth()->user()->pos_companies_id;
+        }
         $product = Product::whereNull(Product::TABLE_NAME . '.deleted_at')
+            ->where(Product::TABLE_NAME . '.pos_companies_id', $posCompaniesId)
             ->where(Product::TABLE_NAME . '.flag_active', Product::STATE_ACTIVE)
             ->where(Product::TABLE_NAME . '.code', $code)
             ->first();

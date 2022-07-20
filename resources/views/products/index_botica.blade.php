@@ -68,7 +68,7 @@ active
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="">
+                    <div class="table-responsive-sm">
                         <table class="myTable align-items-center table-bordered table-hover table-sm" id="carListDataTable">
                             <thead class="thead-dark">
                                 <tr>

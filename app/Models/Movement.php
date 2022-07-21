@@ -43,6 +43,9 @@ class Movement extends Model
         'created_by','updated_by','deleted_by',
         'flag_active','created_at','updated_at','deleted_at',
     ];
+    protected $hidden = [
+        'items',
+    ];
     /**
      * Casting of attributes
      *

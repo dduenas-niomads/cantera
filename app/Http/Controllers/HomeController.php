@@ -32,6 +32,7 @@ class HomeController extends Controller
             'filter_date' => "Periodo " . date("M") . " del " .  date("Y"),
             'sales' => SaleController::getTotalSalesByPeriod(date("Ym")),
             'reservations' => ReservationController::getTotalReservationsByPeriod(date("Y-m")),
+            'clients' => ClientController::getTotalClients(),
             'products' => ProductController::getTotalProducts()
         ];
         if (Auth()->user()->rols_id === 1) {

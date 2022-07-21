@@ -54,8 +54,8 @@ active
                                     <th scope="col" class="thTaxationMiddle">Fecha</th>
                                     <th scope="col" class="thTaxationMiddle">Tipo</th>
                                     <th scope="col" class="thTaxationMiddle">Referencia</th>
-                                    <th scope="col" class="thTaxationMiddle">Total movimiento</th>
-                                    <th scope="col" class="thTaxationMiddle">Productos</th>
+                                    <th scope="col" class="thTaxationMiddle">Cantidad productos</th>
+                                    <th scope="col" class="thTaxationMiddle">Costo del movimiento</th>
                                     <th scope="col" class="thTaxationRight"></th>
                                 </tr>
                             </thead>
@@ -66,23 +66,15 @@ active
                                     <td>{{ $object->created_at }}</td>
                                     <td>{{ $object->type_movement_name }}</td>
                                     <td>{{ $object->ref_document }}</td>
-                                    <td>{{ $object->total_amount }}</td>
-                                    <td>
-                                        @foreach ($object->items as $item)
-                                        <ul>
-                                            <li><b>Nombre:</b> {{ $item['name'] }}</li>
-                                            <li><b>Código:</b> {{ $item['code'] }}</li>
-                                            <li><b>Cantidad:</b> {{ $item['quantity'] }}</li>
-                                            <li><b>Precio:</b> {{ $item['price'] }}</li>
-                                        </ul>
-                                        @endforeach
-                                    </td>
+                                    <td>{{ $object->total_products }}</td>
+                                    <td>{{ number_format($object->total_amount, 2) }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="#">Ver movimiento</a>
                                                 <a class="dropdown-item" href="#">Anular movimiento</a>
                                             </div>
                                         </div>

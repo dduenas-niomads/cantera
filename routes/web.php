@@ -125,6 +125,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/api/sales-by-reservation-id/{reservationId}', 'App\Http\Controllers\SaleController@apiSalesByReservationId');
 	Route::get('/api/sale-by-id/{saleId}', 'App\Http\Controllers\SaleController@apiSaleById');
 
+	Route::get('/api/search-document', 'App\Http\Controllers\SaleController@getSunatDocumentInfo');
+
 });
 
 Route::get('/commands/backup', function() {

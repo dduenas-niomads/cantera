@@ -291,7 +291,7 @@ function autocompleteAjaxForClient(headerId, inputId, tagName, inputParent = nul
                 b = document.createElement("DIV");
                 b.setAttribute('class', 'form-control-autocomplete');
                 if (resource === "clients") {
-                    b.innerHTML += response[i].names + " (" + ((response[i].document_number) ? response[i].document_number : "SIN DOCUMENTO") + ")";
+                    b.innerHTML += response[i].name + " (" + ((response[i].document_number) ? response[i].document_number : "SIN DOCUMENTO") + ")";
                 } else {
                     b.innerHTML += response[i].name;
                 }
@@ -299,20 +299,19 @@ function autocompleteAjaxForClient(headerId, inputId, tagName, inputParent = nul
                 b.addEventListener("click", function(e) {
                     // agregar value al input
                     var iterator = this.getElementsByTagName("input")[0].value;
-                    iterator = JSON.parse(iterator);                    
+                    iterator = JSON.parse(iterator);  
+                    inp.value = iterator.name;
+                    inp.innerHTML = iterator.name;
+                    document.getElementById(inputId + "_id").value = iterator.id;       
                     if (resource === "clients") {
-                        inp.value = iterator.names;
-                        inp.innerHTML = iterator.names;
-                        document.getElementById(inputId + "_id").value = iterator.id;
                         var typeDocument_ = document.getElementById('input-client_type_document');
                         var documentNumber_ = document.getElementById('input-client_document_number');
-                        if (typeDocument_ && documentNumber_) {
+                        var email_ = document.getElementById('input-client_email');
+                        if (typeDocument_ && documentNumber_ && email_) {
                             typeDocument_.value = iterator.type_document;
                             documentNumber_.value = iterator.document_number;
+                            email_.value = iterator.email;
                         }
-                    } else {
-                        inp.value = iterator.name;
-                        inp.innerHTML = iterator.name;
                     }
                     // llenar datos en form cliente
                     // agregar value al input_id

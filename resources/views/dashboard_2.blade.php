@@ -35,7 +35,11 @@ active
                         <div class="row align-items-center">
                             <div class="col">
                                 <h6 class="text-uppercase text-muted ls-1 mb-1">Efectividad</h6>
-                                <h2 class="mb-0">Reservas completadas</h2>
+								@if (Auth()->user()->company->type_business === 1)
+                                    <h2 class="mb-0">Reservas completadas</h2>
+                                @else
+                                    <h2 class="mb-0">Movimientos</h2>
+                                @endif
                             </div>
                         </div>
                     </div>

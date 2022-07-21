@@ -429,8 +429,8 @@ active
 					alert("Ingrese el precio del producto");
 					return;
 				}
-				if (!(parseFloat(item.price) > 0)) {
-					alert("El precio debe ser mayor a S/ 0.00");
+				if (!(parseFloat(item.price) >= 0)) {
+					alert("El precio debe ser mayor o igual a S/ 0.00");
 					return;
 				}
 				document.getElementById('item_product_id').value = "";

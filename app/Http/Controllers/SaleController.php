@@ -154,6 +154,7 @@ class SaleController extends Controller
         $noUser->name = "SIN DATO";
         $noUser->lastname = "";
         $users = [$noUser];
+        $user = Auth()->user();
         $message = "Ingrese código de reserva para empezar una venta.";
         $messageClass = "default";
         if (isset($params['reservation_code'])) {
@@ -179,7 +180,7 @@ class SaleController extends Controller
         }
         # RUCS
         $rucs = Tax::whereNull(Tax::TABLE_NAME . '.deleted_at')
-            ->where(Tax::TABLE_NAME . '.cancha_id', Auth()->user()->cancha_id);
+            ->where(Tax::TABLE_NAME . '.cancha_id', $user->cancha_id);
         if (!is_null($reservation)) {
             $rucs = $rucs->where('type', 1);
         }
@@ -191,10 +192,33 @@ class SaleController extends Controller
             # GATEWAYS
             $gateways = Gateway::whereNull(Gateway::TABLE_NAME . '.deleted_at')->get();
             # return
-            return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users', 'gateways'));
+            return view(Sale::MODULE_NAME . '.create',  compact('reservation', 'rucs', 'car', 'taxation', 'holder', 'owner', 'message', 'messageClass', 'users', 'gateways', 'user'));
         } else {
             return view(Sale::MODULE_NAME . '.no_rucs_available');
         }
+    }
+
+    public function getSunatDocumentInfo(Request $request)
+    {
+        $params = $request->all();
+        $httpStatus = 404;
+        $response = [];
+        $request = HttpClient::withHeaders([
+            'Authorization' => 'Bearer ' . env('SUNAT_DOCUMENT_AUTHORIZATION')
+        ])->get(env('SUNAT_DOCUMENT_URL') . $params["entity"] . "?numero=" . $params["document"]);
+        $response = $request->json();
+        if ($request->successful()) {
+            $httpStatus = 200;
+            if ($params["entity"] === "ruc") {
+                if (isset($response['estado']) && $response['estado'] != 'ACTIVO') {
+                    $httpStatus = 404;
+                    $response = [
+                        "error" => "Documento no se encuentra ACTIVO."
+                    ];
+                }
+            }            
+        }
+        return response($response, $httpStatus);
     }
 
     public function deleteSalesAmount($reservation = null)

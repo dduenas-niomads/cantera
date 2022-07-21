@@ -44,17 +44,23 @@
         @endif
         <div class="col-md-12">
             <h5 for="">Items de venta</h5>
-            <table class="myTable align-items-center table-bordered table-hover table-sm table-responsive">
-                <thead>
-                    <th scope="col" class="thTaxationLeft">Código</th>
-                    <th scope="col" class="thTaxationMiddle">Nombre</th>
-                    <th scope="col" class="thTaxationMiddle">Cantidad</th>
-                    <th scope="col" class="thTaxationMiddle">Precio unitario</th>
-                    <th scope="col" class="thTaxationRight"><a id="buttonNew" class="button btn btn-success btn-sm" href="javascript:void(0);" onclick="newItemTd();"><i class="fas fa-plus"></i></a></th>
-                </thead>
-                <tbody id="expenses_json">
-                </tbody>
-            </table>
+            <div class="table-responsive-sm">
+                <table class="myTable align-items-center table-bordered table-hover table-sm" id="itemsListDataTable">
+                    <thead>
+                        <th scope="col" class="thTaxationLeft">Código</th>
+                        <th scope="col" class="thTaxationMiddle">Familia</th>
+                        <th scope="col" class="thTaxationMiddle">Subfamilia</th>
+                        <th scope="col" class="thTaxationMiddle">Genérico</th>
+                        <th scope="col" class="thTaxationMiddle">Marca/Lab</th>
+                        <th scope="col" class="thTaxationMiddle">Nombre</th>
+                        <th scope="col" class="thTaxationMiddle">Cantidad</th>
+                        <th scope="col" class="thTaxationMiddle">Precio unitario</th>
+                        <th scope="col" class="thTaxationRight"><a id="buttonNew" class="button btn btn-success btn-sm" href="javascript:void(0);" onclick="newItemTd();"><i class="fas fa-plus"></i></a></th>
+                    </thead>
+                    <tbody id="expenses_json">
+                    </tbody>
+                </table>
+            </div>
             <br>
         </div>
     </div>
@@ -63,7 +69,7 @@
     <div class="col-md-12">
         <div class="text-center">
             <button type="button" class="btn btn-default" onclick="stepperValidation(false);">Regresar</button>
-            <button type="button" class="btn btn-default" onclick="lastStep();">Continuar</button>
+            <button type="button" class="btn btn-success" onclick="lastStep();">Continuar</button>
         </div>
         <br>
     </div>

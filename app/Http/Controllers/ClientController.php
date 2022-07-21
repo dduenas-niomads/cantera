@@ -32,14 +32,16 @@ class ClientController extends Controller
     {
         $responseStatus = 200;
         $user = Auth()->user();
+        $params = $request->all();
         $requestedName = $request->query('name', '');
-        $concatQuery = $this->generateConcatRow([Client::TABLE_NAME . '.names', 
-            Client::TABLE_NAME . '.first_lastname', Client::TABLE_NAME . '.second_lastname',
-            Client::TABLE_NAME . '.rz_social', Client::TABLE_NAME . '.commercial_name']);
-        $list = Client::select(Client::TABLE_NAME . '.*',
-                DB::raw($concatQuery))
-            ->whereNull(Client::TABLE_NAME . '.deleted_at')
+        $list = Client::whereNull(Client::TABLE_NAME . '.deleted_at')
             ->where(Client::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
+        if (isset($params['type_document'])) {
+            $list = $list->where(Client::TABLE_NAME . '.type_document', $params['type_document']);
+        }
+        if (isset($params['document_number'])) {
+            $list = $list->where(Client::TABLE_NAME . '.document_number', $params['document_number']);
+        }
         $list = $list->where(function($query) use ($requestedName){
             $query->where(Client::TABLE_NAME . '.names', 'LIKE', '%' . $requestedName . '%');
             $query->orWhere(Client::TABLE_NAME . '.first_lastname', 'LIKE', '%' . $requestedName . '%');
@@ -77,8 +79,10 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $params = $request->all();
-        $params['created_by'] = Auth::user()->id;
+        $user = Auth::user();
+        $params['created_by'] = $user->id;
         $params['name'] = self::generateNameValue($params);
+        $params['pos_companies_id'] = $user->pos_companies_id;
         $client = Client::create($params);
         $message = "El cliente se registró correctamente.";
         $messageClass = "success";
@@ -159,6 +163,19 @@ class ClientController extends Controller
         return $client;
     }
 
+    public static function getTotalClients($canchaId = null)
+    {
+        $clients = Client::whereNull(Client::TABLE_NAME . '.deleted_at')
+            ->where(Client::TABLE_NAME . '.pos_companies_id', Auth()->user()->pos_companies_id)
+            ->where(Client::TABLE_NAME . '.flag_active', Client::STATE_ACTIVE);
+        if (!is_null($canchaId)) {
+            # buscar por cancha id
+        }
+        $clients = $clients->get();
+
+        return count($clients);
+    }
+
     public static function validateClientInfo($params = [])
     {
         $client = null;
@@ -169,7 +186,7 @@ class ClientController extends Controller
                 $client->type_document = $params['client_type_document'];
                 $client->document_number = $params['client_document_number'];
                 $client->name = $params['client_name'];
-                $client->names = $params['client_name'];
+                $client->email = $params['client_email'];
                 $client->save();
             }
         }
@@ -178,7 +195,8 @@ class ClientController extends Controller
             $client->type_document = $params['client_type_document'];
             $client->document_number = $params['client_document_number'];
             $client->name = $params['client_name'];
-            $client->names = $params['client_name'];
+            $client->email = $params['client_email'];
+            $client->pos_companies_id = Auth()->user()->pos_companies_id;
             $client->save();
         }
         

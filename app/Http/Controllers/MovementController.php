@@ -43,7 +43,9 @@ class MovementController extends Controller
     public function index()
     {
         $user = Auth()->user();
-        $list = Movement::whereNull(Movement::TABLE_NAME . '.deleted_at')
+        $list = Movement::select(Movement::TABLE_NAME . '.*', 
+                \DB::raw("JSON_LENGTH(items) as total_products"))
+            ->whereNull(Movement::TABLE_NAME . '.deleted_at')
             ->where(Movement::TABLE_NAME . '.pos_companies_id', $user->pos_companies_id);
         if ($user->rolls_id !== 1) {
             $list = $list->where(Movement::TABLE_NAME . '.cancha_id', $user->cancha_id);

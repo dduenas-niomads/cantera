@@ -53,6 +53,7 @@ active
                                     <th scope="col" class="thTaxationLeft">Tipo</th>
                                     <th scope="col" class="thTaxationMiddle">N° Documento</th>
                                     <th scope="col" class="thTaxationMiddle">Nombres y apellidos / Razón social</th>
+                                    <th scope="col" class="thTaxationMiddle">Correo electrónico</th>
                                     <th scope="col" class="thTaxationMiddle">Fecha registro</th>
                                     <th scope="col" class="thTaxationRight"></th>
                                 </tr>
@@ -62,7 +63,8 @@ active
                                 <tr>
                                     <td>{{ ((int)$value->type === 1) ? "PERSONA" : "EMPRESA" }}</td>
                                     <td>{{ $typeDocumentNames[$value->type_document] }} <b>{{ $value->document_number }}</b></td>
-                                    <td>{{ $value->names }}</td>
+                                    <td>{{ $value->name }}</td>
+                                    <td>{{ $value->email }}</td>
                                     <td>{{ $value->created_at->format("d/m/Y H:i:s") }}</td>
                                     <td class="text-right">
                                         <div class="dropdown">

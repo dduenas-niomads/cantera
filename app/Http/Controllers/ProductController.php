@@ -42,11 +42,31 @@ class ProductController extends Controller
             ];
         }
 
+        if (isset($params['code'])) {
+            $list = $list->where(Product::TABLE_NAME . '.code', $params['code']);
+        }
+
+        if (isset($params['family'])) {
+            $list = $list->where(Product::TABLE_NAME . '.family', 'LIKE', '%' . $params['family'] . '%');
+        }
+
+        if (isset($params['subfamily'])) {
+            $list = $list->where(Product::TABLE_NAME . '.subfamily', 'LIKE', '%' . $params['subfamily'] . '%');
+        }
+
+        if (isset($params['generic'])) {
+            $list = $list->where(Product::TABLE_NAME . '.generic', 'LIKE', '%' . $params['generic'] . '%');
+        }
+
+        if (isset($params['lab'])) {
+            $list = $list->where(Product::TABLE_NAME . '.lab', 'LIKE', '%' . $params['lab'] . '%');
+        }
+
         if (isset($params['search']) && isset($params['search']['value'])) {
             $key = $params['search']['value'];
             $list = $list->where(function($query) use ($key){
                 $query->where(Product::TABLE_NAME . '.category', 'LIKE', '%' . $key . '%');
-                $query->orWhere(Product::TABLE_NAME . '.brand', 'LIKE', '%' . $key . '%');
+                $query->orWhere(Product::TABLE_NAME . '.code', 'LIKE', '%' . $key . '%');
                 $query->orWhere(Product::TABLE_NAME . '.name', 'LIKE', '%' . $key . '%');
                 $query->orWhere(Product::TABLE_NAME . '.description', 'LIKE', '%' . $key . '%');
                 $query->orWhere(Product::TABLE_NAME . '.type_product', 'LIKE', '%' . $key . '%');
@@ -63,7 +83,7 @@ class ProductController extends Controller
                 $array_order[$params['order'][0]['column']], 
                 $params['order'][0]['dir']);
         } else {
-            $list = $list->orderBy(Product::TABLE_NAME . '.id', 'DESC');
+            $list = $list->orderBy(Product::TABLE_NAME . '.name', 'asc');
         }
 
         if (isset($params['tag']) && $params['tag'] === 'autocomplete') {

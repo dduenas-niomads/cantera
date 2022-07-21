@@ -48,36 +48,91 @@ active
 											required>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="form-control-label" for="input-category">{{ __('Categoría') }}</label>
-											<div id="mainheaderCategory">
-												<input type="text" maxlength="50" name="category" id="input-category" 
-													onkeyup="autocompleteAjax('mainheaderCategory', 'input-category', 'category');
-														cleanChilds(['input-model']);"
-													class="form-control " 
-													placeholder="{{ __('Ingrese categoría del producto') }}" 
-													value="{{ (!is_null($product) ? $product->brand : '') }}" 
-													required>
+								@if (Auth()->user()->company->type_business === 1)
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-category">{{ __('Categoría') }}</label>
+												<div id="mainheaderCategory">
+													<input type="text" maxlength="50" name="category" id="input-category" 
+														onkeyup="autocompleteAjax('mainheaderCategory', 'input-category', 'category');
+															cleanChilds(['input-model']);"
+														class="form-control " 
+														placeholder="{{ __('Ingrese categoría del producto') }}" 
+														value="{{ (!is_null($product) ? $product->category : '') }}" 
+														required>
+												</div>
 											</div>
-										</div>										
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="form-control-label" for="input-brand">{{ __('Marca') }}</label>
-											<div id="mainheaderBrand">
-												<input type="text" maxlength="50" name="brand" id="input-brand" 
-													onkeyup="autocompleteAjax('mainheaderBrand', 'input-brand', 'brand');
-														cleanChilds(['input-model']);"
-													class="form-control " 
-													placeholder="{{ __('Ingrese marca del producto') }}" 
-													value="{{ (!is_null($product) ? $product->brand : '') }}" 
-													required>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-brand">{{ __('Marca') }}</label>
+												<div id="mainheaderBrand">
+													<input type="text" maxlength="50" name="brand" id="input-brand" 
+														onkeyup="autocompleteAjax('mainheaderBrand', 'input-brand', 'brand');
+															cleanChilds(['input-model']);"
+														class="form-control " 
+														placeholder="{{ __('Ingrese marca del producto') }}" 
+														value="{{ (!is_null($product) ? $product->brand : '') }}" 
+														required>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								@else
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-family">{{ __('Familia') }}</label>
+												<div id="mainheaderCategory">
+													<input type="text" maxlength="50" name="family" id="input-family"
+														class="form-control " 
+														placeholder="{{ __('Ingrese familia del producto') }}" 
+														value="{{ (!is_null($product) ? $product->family : '') }}" 
+														required>
+												</div>
+											</div>										
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-subfamily">{{ __('Subfamilia') }}</label>
+												<div id="mainheaderBrand">
+													<input type="text" maxlength="50" name="subfamily" id="input-subfamily"
+														class="form-control " 
+														placeholder="{{ __('Ingrese subfamilia del producto') }}" 
+														value="{{ (!is_null($product) ? $product->subfamily : '') }}" 
+														required>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-generic">{{ __('Genérico o referencia') }}</label>
+												<div id="mainheaderCategory">
+													<input type="text" maxlength="50" name="generic" id="input-generic"
+														class="form-control " 
+														placeholder="{{ __('Ingrese genérico del producto') }}" 
+														value="{{ (!is_null($product) ? $product->generic : '') }}" 
+														required>
+												</div>
+											</div>										
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-lab">{{ __('Marca o Laboratorio') }}</label>
+												<div id="mainheaderBrand">
+													<input type="text" maxlength="50" name="lab" id="input-lab"
+														class="form-control " 
+														placeholder="{{ __('Ingrese laboratorio del producto') }}" 
+														value="{{ (!is_null($product) ? $product->lab : '') }}" 
+														required>
+												</div>
+											</div>
+										</div>
+									</div>
+								@endif
 								<div class="form-group">
 									<label class="form-control-label" for="input-name">{{ __('Nombre') }}</label>
 									<div>
@@ -86,15 +141,6 @@ active
 											placeholder="{{ __('Ingrese nombre del producto') }}" 
 											value="{{ (!is_null($product) ? $product->name : '') }}" 
 											required>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="form-control-label" for="input-description">{{ __('Descripción') }}</label>
-									<div>
-										<input type="text" maxlength="100" name="description" id="input-description"
-											class="form-control " 
-											placeholder="{{ __('Ingrese descripción del producto') }}" 
-											value="{{ (!is_null($product) ? $product->description : '') }}" >
 									</div>
 								</div>
 							</div>
@@ -113,18 +159,14 @@ active
 										</div>
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="form-control-label" for="input-type_product">{{ __('Situación de venta') }}</label>
-									<select name="type_product" id="input-type_product" class="form-control ">
-										<option selected value="1">PRODUCTO</option>
-										<option value="2">SERVICIO</option>
-									</select>
-								</div>
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="form-control-label" for="input-stock">{{ __('Stock actual') }}</label>
-											<input type="number" name="stock" id="input-stock" class="form-control " placeholder="{{ __('Ingrese stock actual') }}" value="{{ (!is_null($product) ? $product->stock : '0') }}" required>
+											<label class="form-control-label" for="input-type_product">{{ __('Situación de venta') }}</label>
+											<select name="type_product" id="input-type_product" class="form-control ">
+												<option selected value="1">PRODUCTO</option>
+												<option value="2">SERVICIO</option>
+											</select>
 										</div>
 									</div>
 									<div class="col-md-6">	
@@ -133,6 +175,13 @@ active
 											<input type="number" name="minimun_stock" id="input-minimun_stock" class="form-control " placeholder="{{ __('Ingrese stock mínimo') }}" value="{{ (!is_null($product) ? $product->minimun_stock : '1') }}" required>
 										</div>
 									</div>
+								</div>
+								<div class="form-group">
+									<label class="form-control-label" for="input-stock">{{ __('Descripción') }}</label>
+									<input type="text" maxlength="100" name="description" id="input-description"
+										class="form-control " 
+										placeholder="{{ __('Ingrese descripción del producto') }}" 
+										value="{{ (!is_null($product) ? $product->description : '') }}" >
 								</div>
 								<div class="form-group">
 									<label class="form-control-label" for="input-flag_active">{{ __('Estado') }}</label>
